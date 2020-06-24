@@ -5,6 +5,7 @@
     "bin": "./index.js",
     "dependencies": {
         "chalk": "^4.1.0",
+        "clean-css": "^4.2.3",
         "commander": "^5.1.0",
         "shelljs": "^0.8.4",
         "yaml": "^1.10.0"

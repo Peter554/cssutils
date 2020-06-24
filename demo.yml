@@ -15,3 +15,4 @@ generate:
     padding:
         alias: pad
         from: spacers
+        rotations: true
