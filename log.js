@@ -11,4 +11,6 @@ const log = Object.keys(levels).reduce(
     {}
 )
 
+log.json = (s) => console.log(chalk.bold.magenta(JSON.stringify((s))))
+
 module.exports = log
