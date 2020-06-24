@@ -13,7 +13,7 @@ variables:
         2: 0.5rem
         3: 0.75rem
         4: 1rem
-    border-sizes:
+    border-size:
         0: 0
         1: 1px
         2: 2px
@@ -32,11 +32,12 @@ generate:
     margin:
         from: space
     border-width:
-        from: border-sizes
+        from: border-size
         rotations: true
-        responsive: true
-        pseudo: [hover, focus]
 breakpoints: 
     md: 800px
     lg: 1200px
+extras:
+    stack:
+        from: space
 

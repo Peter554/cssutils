@@ -148,6 +148,17 @@ const generate = (config) => {
         css += '\n'
     }
 
+    if (config.extras) {
+        if (config.extras.stack) {
+            for (const [k1, v1] of entries(
+                config.variables[config.extras.stack.from]
+            )) {
+                css += `.stack-${k1} > * { margin-top: 0; } \n`
+                css += `.stack-${k1} > * + * { margin-top: ${v1}; } \n`
+            }
+        }
+    }
+
     return css.trim() + '\n'
 }
 
