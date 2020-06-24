@@ -7,6 +7,8 @@
     "bin": "./app.js",
     "dependencies": {
         "chalk": "^4.1.0",
-        "commander": "^5.1.0"
+        "commander": "^5.1.0",
+        "shelljs": "^0.8.4",
+        "yaml": "^1.10.0"
     }
 }
