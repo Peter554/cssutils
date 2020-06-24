@@ -1,0 +1,12 @@
+{
+    "name": "cssutils",
+    "version": "0.1.0",
+    "scripts": {
+        "start": "node ./app.js"
+    },
+    "bin": "./app.js",
+    "dependencies": {
+        "chalk": "^4.1.0",
+        "commander": "^5.1.0"
+    }
+}
