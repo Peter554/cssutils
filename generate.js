@@ -2,6 +2,18 @@ const log = require('./log')
 
 const entries = Object.entries
 
+const propertyRotations = {
+    'border-width': (rotation) => `border-${rotation}-width`,
+}
+
+const rotate = (key, rotation) => {
+    if (propertyRotations[key]) {
+        return propertyRotations[key](rotation)
+    } else {
+        return `${key}-${rotation}`
+    }
+}
+
 const generate = (config) => {
     let css = ''
 
@@ -31,7 +43,10 @@ const generate = (config) => {
                             (rotation) => {
                                 css += `.${
                                     v1.alias ? v1.alias : k1
-                                }-${rotation}-${k2}-${k3} { ${k1}-${rotation}: ${v3}; }\n`
+                                }-${rotation}-${k2}-${k3} { ${rotate(
+                                    k1,
+                                    rotation
+                                )}: ${v3}; }\n`
                             }
                         )
                     }
@@ -42,7 +57,10 @@ const generate = (config) => {
                     ;['left', 'right', 'top', 'bottom'].forEach((rotation) => {
                         css += `.${
                             v1.alias ? v1.alias : k1
-                        }-${rotation}-${k2} { ${k1}-${rotation}: ${v2}; }\n`
+                        }-${rotation}-${k2} { ${rotate(
+                            k1,
+                            rotation
+                        )}: ${v2}; }\n`
                     })
                 }
             }
@@ -59,7 +77,10 @@ const generate = (config) => {
                                     (rotation) => {
                                         css += `@media (min-width: ${v3}) { .${k3}\\:${
                                             v1.alias ? v1.alias : k1
-                                        }-${rotation}-${k2}-${k4} { ${k1}-${rotation}: ${v4}; } }\n`
+                                        }-${rotation}-${k2}-${k4} { ${rotate(
+                                            k1,
+                                            rotation
+                                        )}: ${v4}; } }\n`
                                     }
                                 )
                             }
@@ -73,7 +94,10 @@ const generate = (config) => {
                                 (rotation) => {
                                     css += `@media (min-width: ${v3}) { .${k3}\\:${
                                         v1.alias ? v1.alias : k1
-                                    }-${rotation}-${k2} { ${k1}-${rotation}: ${v2}; } }\n`
+                                    }-${rotation}-${k2} { ${rotate(
+                                        k1,
+                                        rotation
+                                    )}: ${v2}; } }\n`
                                 }
                             )
                         }
@@ -93,7 +117,10 @@ const generate = (config) => {
                                     (rotation) => {
                                         css += `.${k3}\\:${
                                             v1.alias ? v1.alias : k1
-                                        }-${rotation}-${k2}-${k4}:${k3} { ${k1}-${rotation}: ${v4}; }\n`
+                                        }-${rotation}-${k2}-${k4}:${k3} { ${rotate(
+                                            k1,
+                                            rotation
+                                        )}: ${v4}; }\n`
                                     }
                                 )
                             }
@@ -107,7 +134,10 @@ const generate = (config) => {
                                 (rotation) => {
                                     css += `.${k3}\\:${
                                         v1.alias ? v1.alias : k1
-                                    }-${rotation}-${k2}:${k3} { ${k1}-${rotation}: ${v2}; }\n`
+                                    }-${rotation}-${k2}:${k3} { ${rotate(
+                                        k1,
+                                        rotation
+                                    )}: ${v2}; }\n`
                                 }
                             )
                         }
