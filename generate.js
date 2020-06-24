@@ -23,13 +23,13 @@ const generate = (config) => {
         for (const [k2, v2] of entries(config.variables[v1.from])) {
             if (typeof v2 == 'object') {
                 for (const [k3, v3] of entries(v2)) {
-                    css += `${
+                    css += `.${
                         v1.alias ? v1.alias : k1
                     }-${k2}-${k3} { ${k1}: ${v3}; }\n`
                     if (v1.rotations) {
                         ;['left', 'right', 'top', 'bottom'].forEach(
                             (rotation) => {
-                                css += `${
+                                css += `.${
                                     v1.alias ? v1.alias : k1
                                 }-${rotation}-${k2}-${k3} { ${k1}-${rotation}: ${v3}; }\n`
                             }
@@ -37,14 +37,82 @@ const generate = (config) => {
                     }
                 }
             } else {
-                css += `${v1.alias ? v1.alias : k1}-${k2} { ${k1}: ${v2}; }\n`
+                css += `.${v1.alias ? v1.alias : k1}-${k2} { ${k1}: ${v2}; }\n`
                 if (v1.rotations) {
                     ;['left', 'right', 'top', 'bottom'].forEach((rotation) => {
-                        css += `${
+                        css += `.${
                             v1.alias ? v1.alias : k1
                         }-${rotation}-${k2} { ${k1}-${rotation}: ${v2}; }\n`
                     })
                 }
+            }
+
+            if (v1.responsive && config.breakpoints) {
+                for (const [k3, v3] of entries(config.breakpoints)) {
+                    if (typeof v2 == 'object') {
+                        for (const [k4, v4] of entries(v2)) {
+                            css += `@media (min-width: ${v3}) { .${k3}\\:${
+                                v1.alias ? v1.alias : k1
+                            }-${k2}-${k4} { ${k1}: ${v4}; } }\n`
+                            if (v1.rotations) {
+                                ;['left', 'right', 'top', 'bottom'].forEach(
+                                    (rotation) => {
+                                        css += `@media (min-width: ${v3}) { .${k3}\\:${
+                                            v1.alias ? v1.alias : k1
+                                        }-${rotation}-${k2}-${k4} { ${k1}-${rotation}: ${v4}; } }\n`
+                                    }
+                                )
+                            }
+                        }
+                    } else {
+                        css += `@media (min-width: ${v3}) { .${k3}\\:${
+                            v1.alias ? v1.alias : k1
+                        }-${k2} { ${k1}: ${v2}; } }\n`
+                        if (v1.rotations) {
+                            ;['left', 'right', 'top', 'bottom'].forEach(
+                                (rotation) => {
+                                    css += `@media (min-width: ${v3}) { .${k3}\\:${
+                                        v1.alias ? v1.alias : k1
+                                    }-${rotation}-${k2} { ${k1}-${rotation}: ${v2}; } }\n`
+                                }
+                            )
+                        }
+                    }
+                }
+            }
+
+            if (v1.pseudo) {
+                v1.pseudo.forEach((k3) => {
+                    if (typeof v2 == 'object') {
+                        for (const [k4, v4] of entries(v2)) {
+                            css += `.${k3}\\:${
+                                v1.alias ? v1.alias : k1
+                            }-${k2}-${k4}:${k3} { ${k1}: ${v4}; }\n`
+                            if (v1.rotations) {
+                                ;['left', 'right', 'top', 'bottom'].forEach(
+                                    (rotation) => {
+                                        css += `.${k3}\\:${
+                                            v1.alias ? v1.alias : k1
+                                        }-${rotation}-${k2}-${k4}:${k3} { ${k1}-${rotation}: ${v4}; }\n`
+                                    }
+                                )
+                            }
+                        }
+                    } else {
+                        css += `.${k3}\\:${
+                            v1.alias ? v1.alias : k1
+                        }-${k2}:${k3} { ${k1}: ${v2}; }\n`
+                        if (v1.rotations) {
+                            ;['left', 'right', 'top', 'bottom'].forEach(
+                                (rotation) => {
+                                    css += `.${k3}\\:${
+                                        v1.alias ? v1.alias : k1
+                                    }-${rotation}-${k2}:${k3} { ${k1}-${rotation}: ${v2}; }\n`
+                                }
+                            )
+                        }
+                    }
+                })
             }
         }
         css += '\n'
