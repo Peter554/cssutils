@@ -1,0 +1,62 @@
+variables:
+  color:
+    white: white
+    black: black
+    red:
+      mid: '#FF443F'
+      dark: '#CC1F1A'
+    green:
+      mid: '#38DD52'
+      dark: '#1F9D55'
+    blue:
+      mid: '#3450DD'
+      dark: '#2779BD'
+  size:
+    0: 0
+    1: 0.25rem
+    2: 0.5rem
+    3: 0.75rem
+    4: 1rem
+generate:
+  color:
+    alias: clr
+    from: color
+  background-color:
+    alias: bgclr
+    from: color
+    pseudo: true
+    breakpoints: true
+  padding:
+    alias: p
+    from: size
+    rotations: true
+  margin:
+    alias: m
+    from: size
+    rotations: true
+  border-radius:
+    alias: br
+    from:
+      0: 0
+      1: 4px
+  border-width:
+    alias: bw
+    from:
+      0: 0
+      1: 1px
+  cursor:
+    alias: csr
+    from:
+      ptr: pointer
+    pseudo: true
+breakpoints:
+  md: 750px
+  lg: 1000px
+pseudo:
+  hvr: hover
+  hcs: [hover, focus]
+extras:
+  stack-x:
+    from: size
+  stack-y:
+    from: size
