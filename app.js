@@ -9,6 +9,8 @@ const YAML = require('yaml')
 const { mkdir } = require('shelljs')
 
 const log = console.log
+const info = chalk.bold.blue
+const success = chalk.bold.green
 const error = chalk.bold.red
 
 program
@@ -20,7 +22,7 @@ program
         output = resolve(output)
 
         if (!existsSync(config)) {
-            log(error(`${config} does not exist`))
+            log(error(`Config file ${config} does not exist.`))
             return
         }
 
@@ -30,6 +32,8 @@ program
 
         mkdir('-p', dirname(output))
         writeFileSync(output, css)
+        log(success('CSS utilites were successfully generated.'))
+        log(success(`Output has been written to ${output}.`))
     })
 
 program.parse(process.argv)
