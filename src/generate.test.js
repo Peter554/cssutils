@@ -7,42 +7,32 @@ describe('generate', () => {
     it('generates variables', () => {
       const config = `
 variables:
-    color:
-        red: '#f00'
-        green: '#0f0'
-        blue: '#00f'`
+  color:
+    red: '#f00'
+    green: '#0f0'
+    blue: '#00f'`
 
       css = generate(YAML.parse(config))
 
-      expect(css).toEqual(
-        `
-:root {
-    --color-red: #f00;
-    --color-green: #0f0;
-    --color-blue: #00f;
-}`.trim()
-      )
+      expect(css).toContain(':root { --color-red: #f00; }')
+      expect(css).toContain(':root { --color-green: #0f0; }')
+      expect(css).toContain(':root { --color-blue: #00f; }')
     })
 
     it('generates nested variables', () => {
       const config = `
 variables:
-    color:
-        gray:
-            100: '#f5f5f5'
-            200: '#eeeeee'
-            300: '#e0e0e0'`
+  color:
+    gray:
+      100: '#f5f5f5'
+      200: '#eeeeee'
+      300: '#e0e0e0'`
 
       css = generate(YAML.parse(config))
 
-      expect(css).toEqual(
-        `
-:root {
-    --color-gray-100: #f5f5f5;
-    --color-gray-200: #eeeeee;
-    --color-gray-300: #e0e0e0;
-}`.trim()
-      )
+      expect(css).toContain(':root { --color-gray-100: #f5f5f5; }')
+      expect(css).toContain(':root { --color-gray-200: #eeeeee; }')
+      expect(css).toContain(':root { --color-gray-300: #e0e0e0; }')
     })
   })
 
@@ -50,11 +40,11 @@ variables:
     it('generates utils', () => {
       const config = `
 generate:
-    color:
-        from:
-            red: '#f00'
-            green: '#0f0'
-            blue: '#00f'`
+  color:
+    from:
+      red: '#f00'
+      green: '#0f0'
+      blue: '#00f'`
 
       css = generate(YAML.parse(config))
 
@@ -66,12 +56,12 @@ generate:
     it('generates utils with alias', () => {
       const config = `
 generate:
-    color:
-        alias: colour
-        from:
-            red: '#f00'
-            green: '#0f0'
-            blue: '#00f'`
+  color:
+    alias: colour
+    from:
+      red: '#f00'
+      green: '#0f0'
+      blue: '#00f'`
 
       css = generate(YAML.parse(config))
 
@@ -83,14 +73,14 @@ generate:
     it('generates nested utils ', () => {
       const config = `
 generate:
-    color:
-        from:
-            red: '#f00'
-            green: '#0f0'
-            gray:
-                100: '#f5f5f5'
-                200: '#eeeeee'
-                300: '#e0e0e0'`
+  color:
+    from:
+      red: '#f00'
+      green: '#0f0'
+      gray:
+        100: '#f5f5f5'
+        200: '#eeeeee'
+        300: '#e0e0e0'`
 
       css = generate(YAML.parse(config))
 
@@ -104,13 +94,13 @@ generate:
     it('generates utils from variables', () => {
       const config = `
 variables:
-    color:
-        red: '#f00'
-        green: '#0f0'
-        blue: '#00f'
+  color:
+    red: '#f00'
+    green: '#0f0'
+    blue: '#00f'
 generate:
-    color:
-        from: color`
+  color:
+    from: color`
 
       css = generate(YAML.parse(config))
 
@@ -122,14 +112,14 @@ generate:
     it('generates nested utils from variables', () => {
       const config = `
 variables:
-    color:
-        gray:
-            100: '#f5f5f5'
-            200: '#eeeeee'
-            300: '#e0e0e0'
+  color:
+    gray:
+      100: '#f5f5f5'
+      200: '#eeeeee'
+      300: '#e0e0e0'
 generate:
-    color:
-        from: color`
+  color:
+    from: color`
 
       css = generate(YAML.parse(config))
 
@@ -141,14 +131,14 @@ generate:
     it('generates responsive utils', () => {
       const config = `
 generate:
-    color:
-        from:
-            red: '#f00'
-            green: '#0f0'
-        responsive: true
+  color:
+    from:
+        red: '#f00'
+        green: '#0f0'
+    responsive: true
 breakpoints:
-    md: 800px
-    lg: 1200px`
+  md: 800px
+  lg: 1200px`
 
       css = generate(YAML.parse(config))
 
@@ -169,11 +159,11 @@ breakpoints:
     it('generates pseudo utils', () => {
       const config = `
 generate:
-    color:
-        from:
-            red: '#f00'
-            green: '#0f0'
-        pseudo: [hover, focus]`
+  color:
+    from:
+      red: '#f00'
+      green: '#0f0'
+    pseudo: [hover, focus]`
 
       css = generate(YAML.parse(config))
 
@@ -186,11 +176,11 @@ generate:
     it('generates util rotations', () => {
       const config = `
 generate:
-    padding:
-        from:
-            md: 0.5rem
-            lg: 1rem
-        rotations: true`
+  padding:
+    from:
+      md: 0.5rem
+      lg: 1rem
+    rotations: true`
 
       css = generate(YAML.parse(config))
 
@@ -210,16 +200,16 @@ generate:
     it('generates a complex util', () => {
       const config = `
 generate:
-    padding:
-        from:
-            md: 0.5rem
-            lg: 1rem
-        responsive: true
-        pseudo: [hover, focus]
-        rotations: true
+  padding:
+    from:
+      md: 0.5rem
+      lg: 1rem
+    responsive: true
+    pseudo: [hover, focus]
+    rotations: true
 breakpoints:
-    md: 800px
-    lg: 1200px`
+  md: 800px
+  lg: 1200px`
 
       css = generate(YAML.parse(config))
 
@@ -249,19 +239,19 @@ breakpoints:
     it('generates a complex nested util', () => {
       const config = `
 generate:
-    background-color:
-        alias: bg-color
-        from:
-            gray:
-                100: '#f5f5f5'
-                200: '#eeeeee'
-                300: '#e0e0e0'
-        responsive: true
-        pseudo: [hover, focus]
-        rotations: true
+  background-color:
+    alias: bg-color
+    from:
+      gray:
+        100: '#f5f5f5'
+        200: '#eeeeee'
+        300: '#e0e0e0'
+    responsive: true
+    pseudo: [hover, focus]
+    rotations: true
 breakpoints:
-    md: 800px
-    lg: 1200px`
+  md: 800px
+  lg: 1200px`
 
       css = generate(YAML.parse(config))
 
@@ -290,10 +280,10 @@ breakpoints:
     it('generates stack', () => {
       const config = `
 extras:
-    stack:
-        from:
-            md: 0.5rem
-            lg: 1rem`
+  stack:
+    from:
+      md: 0.5rem
+      lg: 1rem`
 
       const css = generate(YAML.parse(config))
 
@@ -306,12 +296,12 @@ extras:
     it('generates stack from variables', () => {
       const config = `
 variables:
-    size:
-        md: 0.5rem
-        lg: 1rem
+  size:
+    md: 0.5rem
+    lg: 1rem
 extras:
-    stack:
-        from: size`
+  stack:
+      from: size`
 
       const css = generate(YAML.parse(config))
 
