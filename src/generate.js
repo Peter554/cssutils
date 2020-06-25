@@ -30,19 +30,22 @@ const generate = (config) => {
   let css = ''
 
   for (const [k1, v1] of entries(config.variables || {})) {
+    const s = []
     for (const [k2, v2] of entries(v1)) {
       if (typeof v2 == 'object') {
         for (const [k3, v3] of entries(v2)) {
-          css += variable(join(k1, k2, k3), v3)
+          s.push(variable(join(k1, k2, k3), v3))
         }
       } else {
-        css += variable(join(k1, k2), v2)
+        s.push(variable(join(k1, k2), v2))
       }
     }
-    css += '\n'
+    css += s.sort().join('') + '\n'
   }
 
   for (const [k1, v1] of entries(config.generate || {})) {
+    const s = []
+
     const rotations = v1.rotations
       ? ['', 'left', 'right', 'top', 'bottom']
       : ['']
@@ -52,14 +55,16 @@ const generate = (config) => {
     )) {
       for (const [k3, v3] of typeof v2 == 'object' ? entries(v2) : [[k2, v2]]) {
         rotations.forEach((rotation) => {
-          css += util.simple(
-            join(
-              v1.alias ? v1.alias : k1,
-              rotation,
-              k3 == k2 ? k2 : join(k2, k3)
-            ),
-            rotate(k1, rotation),
-            v3
+          s.push(
+            util.simple(
+              join(
+                v1.alias ? v1.alias : k1,
+                rotation,
+                k3 == k2 ? k2 : join(k2, k3)
+              ),
+              rotate(k1, rotation),
+              v3
+            )
           )
         })
       }
@@ -74,16 +79,18 @@ const generate = (config) => {
             ? entries(v2)
             : [[k2, v2]]) {
             rotations.forEach((rotation) => {
-              css += util.responsive(
-                v3,
-                k3,
-                join(
-                  v1.alias ? v1.alias : k1,
-                  rotation,
-                  k4 == k2 ? k2 : join(k2, k4)
-                ),
-                rotate(k1, rotation),
-                v4
+              s.push(
+                util.responsive(
+                  v3,
+                  k3,
+                  join(
+                    v1.alias ? v1.alias : k1,
+                    rotation,
+                    k4 == k2 ? k2 : join(k2, k4)
+                  ),
+                  rotate(k1, rotation),
+                  v4
+                )
               )
             })
           }
@@ -95,33 +102,37 @@ const generate = (config) => {
           ? entries(v2)
           : [[k2, v2]]) {
           rotations.forEach((rotation) => {
-            css += util.pseudo(
-              k3,
-              join(
-                v1.alias ? v1.alias : k1,
-                rotation,
-                k4 == k2 ? k2 : join(k2, k4)
-              ),
-              rotate(k1, rotation),
-              v4
+            s.push(
+              util.pseudo(
+                k3,
+                join(
+                  v1.alias ? v1.alias : k1,
+                  rotation,
+                  k4 == k2 ? k2 : join(k2, k4)
+                ),
+                rotate(k1, rotation),
+                v4
+              )
             )
           })
         }
       })
     }
-    css += '\n'
+    css += s.sort().join('') + '\n'
   }
 
   if (config.extras) {
     if (config.extras.stack) {
+      const s = []
       for (const [k1, v1] of entries(
         typeof config.extras.stack.from == 'object'
           ? config.extras.stack.from
           : config.variables[config.extras.stack.from]
       )) {
-        css += `.stack-${k1} > * { margin-top: 0; } \n`
-        css += `.stack-${k1} > * + * { margin-top: ${v1}; } \n`
+        s.push(`.stack-${k1} > * { margin-top: 0; } \n`)
+        s.push(`.stack-${k1} > * + * { margin-top: ${v1}; } \n`)
       }
+      css += s.sort().join('') + '\n'
     }
   }
 
