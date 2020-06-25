@@ -23,19 +23,30 @@ const generate = (config) => {
   const variable = (name, value) =>
     `:root { --${join(prefix, name)}: ${value}; }\n`
 
+  const mapProperties = (properties, value, terminator) =>
+    (typeof properties == 'object' ? properties : [properties])
+      .map((property) => `${property}: ${value}${terminator}`)
+      .join(' ')
+
   const util = {
-    simple: (className, property, value) =>
-      `.${join(prefix, className)} { ${property}: ${value}${terminator} }\n`,
-    responsive: (minWidth, breakpointName, className, property, value) =>
+    simple: (className, properties, value) => {
+      return `.${join(prefix, className)} { ${mapProperties(
+        properties,
+        value,
+        terminator
+      )} }\n`
+    },
+    responsive: (minWidth, breakpointName, className, properties, value) =>
       `@media (min-width: ${minWidth}) { .${breakpointName}\\:${join(
         prefix,
         className
-      )} { ${property}: ${value}${terminator} } }\n`,
-    pseudo: (pseudo, className, property, value) =>
-      `.${pseudo}\\:${join(
-        prefix,
-        className
-      )}:${pseudo} { ${property}: ${value}${terminator} }\n`,
+      )} { ${mapProperties(properties, value, terminator)} } }\n`,
+    pseudo: (pseudo, className, properties, value) =>
+      `.${pseudo}\\:${join(prefix, className)}:${pseudo} { ${mapProperties(
+        properties,
+        value,
+        terminator
+      )} }\n`,
   }
 
   let css = ''
