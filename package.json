@@ -1,22 +1,22 @@
 {
-    "name": "@peter554/cssutils",
-    "version": "0.1.9",
-    "scripts": {
-        "test": "jest",
-        "prettier": "prettier --write ." 
-    },
-    "bin": {
-        "cssutils": "./src/index.js"
-    },
-    "dependencies": {
-        "chalk": "^4.1.0",
-        "clean-css": "^4.2.3",
-        "commander": "^5.1.0",
-        "shelljs": "^0.8.4",
-        "yaml": "^1.10.0"
-    },
-    "devDependencies": {
-        "jest": "^26.1.0",
-        "prettier": "^2.0.5"
-    }
+  "name": "@peter554/cssutils",
+  "version": "0.1.9",
+  "scripts": {
+    "test": "jest",
+    "prettier": "prettier --write '**/*.(js|json)'"
+  },
+  "bin": {
+    "cssutils": "./src/index.js"
+  },
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "clean-css": "^4.2.3",
+    "commander": "^5.1.0",
+    "shelljs": "^0.8.4",
+    "yaml": "^1.10.0"
+  },
+  "devDependencies": {
+    "jest": "^26.1.0",
+    "prettier": "^2.0.5"
+  }
 }

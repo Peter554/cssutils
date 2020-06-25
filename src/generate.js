@@ -3,135 +3,135 @@ const entries = Object.entries
 const variable = (name, value) => `    --${name}: ${value};\n`
 
 const util = {
-    simple: (className, property, value) =>
-        `.${className} { ${property}: ${value}; }\n`,
-    responsive: (minWidth, breakpointName, className, property, value) =>
-        `@media (min-width: ${minWidth}) { .${breakpointName}\\:${className} { ${property}: ${value}; } }\n`,
-    pseudo: (pseudo, className, property, value) =>
-        `.${pseudo}\\:${className}:${pseudo} { ${property}: ${value}; }\n`,
+  simple: (className, property, value) =>
+    `.${className} { ${property}: ${value}; }\n`,
+  responsive: (minWidth, breakpointName, className, property, value) =>
+    `@media (min-width: ${minWidth}) { .${breakpointName}\\:${className} { ${property}: ${value}; } }\n`,
+  pseudo: (pseudo, className, property, value) =>
+    `.${pseudo}\\:${className}:${pseudo} { ${property}: ${value}; }\n`,
 }
 
 const join = (...values) => values.filter((o) => !!o).join('-')
 
 const propertyRotations = {
-    'border-width': (rotation) => `border-${rotation}-width`,
+  'border-width': (rotation) => `border-${rotation}-width`,
 }
 
 const rotate = (key, rotation) => {
-    if (!rotation) {
-        return key
-    }
-    if (propertyRotations[key]) {
-        return propertyRotations[key](rotation)
-    } else {
-        return `${key}-${rotation}`
-    }
+  if (!rotation) {
+    return key
+  }
+  if (propertyRotations[key]) {
+    return propertyRotations[key](rotation)
+  } else {
+    return `${key}-${rotation}`
+  }
 }
 
 const generate = (config) => {
-    let css = ''
+  let css = ''
 
-    if (config.variables) {
-        css += ':root {\n'
-        for (const [k1, v1] of entries(config.variables)) {
-            for (const [k2, v2] of entries(v1)) {
-                if (typeof v2 == 'object') {
-                    for (const [k3, v3] of entries(v2)) {
-                        css += variable(join(k1, k2, k3), v3)
-                    }
-                } else {
-                    css += variable(join(k1, k2), v2)
-                }
-            }
+  if (config.variables) {
+    css += ':root {\n'
+    for (const [k1, v1] of entries(config.variables)) {
+      for (const [k2, v2] of entries(v1)) {
+        if (typeof v2 == 'object') {
+          for (const [k3, v3] of entries(v2)) {
+            css += variable(join(k1, k2, k3), v3)
+          }
+        } else {
+          css += variable(join(k1, k2), v2)
         }
-        css += '}\n\n'
+      }
     }
+    css += '}\n\n'
+  }
 
-    if (config.generate) {
-        for (const [k1, v1] of entries(config.generate)) {
-            const rotations = v1.rotations
-                ? ['', 'left', 'right', 'top', 'bottom']
-                : ['']
-            for (const [k2, v2] of entries(
-                typeof v1.from == 'object' ? v1.from : config.variables[v1.from]
-            )) {
-                for (const [k3, v3] of typeof v2 == 'object'
-                    ? entries(v2)
-                    : [[k2, v2]]) {
-                    rotations.forEach((rotation) => {
-                        css += util.simple(
-                            join(
-                                v1.alias ? v1.alias : k1,
-                                rotation,
-                                k3 == k2 ? k2 : join(k2, k3)
-                            ),
-                            rotate(k1, rotation),
-                            v3
-                        )
-                    })
-                }
+  if (config.generate) {
+    for (const [k1, v1] of entries(config.generate)) {
+      const rotations = v1.rotations
+        ? ['', 'left', 'right', 'top', 'bottom']
+        : ['']
 
-                if (v1.responsive && config.breakpoints) {
-                    for (const [k3, v3] of entries(config.breakpoints)) {
-                        for (const [k4, v4] of typeof v2 == 'object'
-                            ? entries(v2)
-                            : [[k2, v2]]) {
-                            rotations.forEach((rotation) => {
-                                css += util.responsive(
-                                    v3,
-                                    k3,
-                                    join(
-                                        v1.alias ? v1.alias : k1,
-                                        rotation,
-                                        k4 == k2 ? k2 : join(k2, k4)
-                                    ),
-                                    rotate(k1, rotation),
-                                    v4
-                                )
-                            })
-                        }
-                    }
-                }
-
-                if (v1.pseudo) {
-                    v1.pseudo.forEach((k3) => {
-                        for (const [k4, v4] of typeof v2 == 'object'
-                            ? entries(v2)
-                            : [[k2, v2]]) {
-                            rotations.forEach((rotation) => {
-                                css += util.pseudo(
-                                    k3,
-                                    join(
-                                        v1.alias ? v1.alias : k1,
-                                        rotation,
-                                        k4 == k2 ? k2 : join(k2, k4)
-                                    ),
-                                    rotate(k1, rotation),
-                                    v4
-                                )
-                            })
-                        }
-                    })
-                }
-            }
-            css += '\n'
+      for (const [k2, v2] of entries(
+        typeof v1.from == 'object' ? v1.from : config.variables[v1.from]
+      )) {
+        for (const [k3, v3] of typeof v2 == 'object'
+          ? entries(v2)
+          : [[k2, v2]]) {
+          rotations.forEach((rotation) => {
+            css += util.simple(
+              join(
+                v1.alias ? v1.alias : k1,
+                rotation,
+                k3 == k2 ? k2 : join(k2, k3)
+              ),
+              rotate(k1, rotation),
+              v3
+            )
+          })
         }
-    }
 
-    if (config.extras) {
-        if (config.extras.stack) {
-            for (const [k1, v1] of entries(
-                typeof config.extras.stack.from == 'object'
-                    ? config.extras.stack.from
-                    : config.variables[config.extras.stack.from]
-            )) {
-                css += `.stack-${k1} > * { margin-top: 0; } \n`
-                css += `.stack-${k1} > * + * { margin-top: ${v1}; } \n`
-            }
+        for (const [k3, v3] of entries(
+          (v1.responsive && config.breakpoints) || {}
+        )) {
+          for (const [k4, v4] of typeof v2 == 'object'
+            ? entries(v2)
+            : [[k2, v2]]) {
+            rotations.forEach((rotation) => {
+              css += util.responsive(
+                v3,
+                k3,
+                join(
+                  v1.alias ? v1.alias : k1,
+                  rotation,
+                  k4 == k2 ? k2 : join(k2, k4)
+                ),
+                rotate(k1, rotation),
+                v4
+              )
+            })
+          }
         }
-    }
 
-    return css.trim()
+        ;(v1.pseudo || []).forEach((k3) => {
+          for (const [k4, v4] of typeof v2 == 'object'
+            ? entries(v2)
+            : [[k2, v2]]) {
+            rotations.forEach((rotation) => {
+              css += util.pseudo(
+                k3,
+                join(
+                  v1.alias ? v1.alias : k1,
+                  rotation,
+                  k4 == k2 ? k2 : join(k2, k4)
+                ),
+                rotate(k1, rotation),
+                v4
+              )
+            })
+          }
+        })
+      }
+
+      css += '\n'
+    }
+  }
+
+  if (config.extras) {
+    if (config.extras.stack) {
+      for (const [k1, v1] of entries(
+        typeof config.extras.stack.from == 'object'
+          ? config.extras.stack.from
+          : config.variables[config.extras.stack.from]
+      )) {
+        css += `.stack-${k1} > * { margin-top: 0; } \n`
+        css += `.stack-${k1} > * + * { margin-top: ${v1}; } \n`
+      }
+    }
+  }
+
+  return css.trim()
 }
 
 module.exports = generate
