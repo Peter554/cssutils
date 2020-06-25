@@ -53,6 +53,23 @@ generate:
       expect(css).toContain(`.color-blue { color: #00f; }`)
     })
 
+    it('generates utils with !important', () => {
+      const config = `
+generate:
+  color:
+    from:
+      red: '#f00'
+      green: '#0f0'
+      blue: '#00f'
+important: true`
+
+      css = generate(YAML.parse(config))
+
+      expect(css).toContain(`.color-red { color: #f00 !important; }`)
+      expect(css).toContain(`.color-green { color: #0f0 !important; }`)
+      expect(css).toContain(`.color-blue { color: #00f !important; }`)
+    })
+
     it('generates utils with alias', () => {
       const config = `
 generate:

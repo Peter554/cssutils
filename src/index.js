@@ -25,6 +25,7 @@ program
     'Output path for generated CSS. If missing CSS is written to stdout.'
   )
   .option('-nm, --nomin', 'Disable CSS minification.')
+  .option('-i, --important', 'Use !important for utility classes.')
   .action((config, cmd) => {
     config = resolve(config)
 

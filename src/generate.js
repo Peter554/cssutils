@@ -3,15 +3,6 @@ const entries = Object.entries
 const join = (...values) => values.filter((o) => !!o).join('-')
 const variable = (name, value) => `:root { --${name}: ${value}; }\n`
 
-const util = {
-  simple: (className, property, value) =>
-    `.${className} { ${property}: ${value}; }\n`,
-  responsive: (minWidth, breakpointName, className, property, value) =>
-    `@media (min-width: ${minWidth}) { .${breakpointName}\\:${className} { ${property}: ${value}; } }\n`,
-  pseudo: (pseudo, className, property, value) =>
-    `.${pseudo}\\:${className}:${pseudo} { ${property}: ${value}; }\n`,
-}
-
 const rotate = (key, rotation) => {
   if (!rotation) {
     return key
@@ -27,6 +18,17 @@ const rotate = (key, rotation) => {
 }
 
 const generate = (config) => {
+  const terminator = config.important ? ' !important;' : ';'
+
+  const util = {
+    simple: (className, property, value) =>
+      `.${className} { ${property}: ${value}${terminator} }\n`,
+    responsive: (minWidth, breakpointName, className, property, value) =>
+      `@media (min-width: ${minWidth}) { .${breakpointName}\\:${className} { ${property}: ${value}${terminator} } }\n`,
+    pseudo: (pseudo, className, property, value) =>
+      `.${pseudo}\\:${className}:${pseudo} { ${property}: ${value}${terminator} }\n`,
+  }
+
   let css = ''
 
   for (const [k1, v1] of entries(config.variables || {})) {
