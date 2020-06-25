@@ -1,5 +1,6 @@
 const entries = Object.entries
 
+const join = (...values) => values.filter((o) => !!o).join('-')
 const variable = (name, value) => `    --${name}: ${value};\n`
 
 const util = {
@@ -11,18 +12,15 @@ const util = {
     `.${pseudo}\\:${className}:${pseudo} { ${property}: ${value}; }\n`,
 }
 
-const join = (...values) => values.filter((o) => !!o).join('-')
-
-const propertyRotations = {
-  'border-width': (rotation) => `border-${rotation}-width`,
-}
-
 const rotate = (key, rotation) => {
   if (!rotation) {
     return key
   }
-  if (propertyRotations[key]) {
-    return propertyRotations[key](rotation)
+  const rotations = {
+    'border-width': (rotation) => `border-${rotation}-width`,
+  }
+  if (rotations[key]) {
+    return rotations[key](rotation)
   } else {
     return `${key}-${rotation}`
   }
