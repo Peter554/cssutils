@@ -39,6 +39,7 @@ const generate = (config) => {
         css += variable(join(k1, k2), v2)
       }
     }
+    css += '\n'
   }
 
   for (const [k1, v1] of entries(config.generate || {})) {

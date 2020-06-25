@@ -13,24 +13,22 @@ A CSS utility class generator. User friendly, simple, powerful. Inspired by [tai
 ```yaml
 # config.yml
 variables:
-    color:
-        red: '#f00'
-        green: '#0f0'
+  color:
+    red: '#f00'
+    green: '#0f0'
 generate:
-    color:
-        from: color
-    padding:
-        alias: pad
-        from:
-            md: 0.5rem
-            lg: 1rem
+  color:
+    from: color
+  padding:
+    alias: pad
+    from:
+      md: 0.5rem
+      lg: 1rem
 ```
 
 ```css
-:root {
-    --color-red: #f00;
-    --color-green: #0f0;
-}
+:root { --color-red: #f00; }
+:root { --color-green: #0f0; }
 
 .color-red { color: #f00; }
 .color-green { color: #0f0; }
