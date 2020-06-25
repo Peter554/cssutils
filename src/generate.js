@@ -18,15 +18,22 @@ const rotate = (key, rotation) => {
 }
 
 const generate = (config) => {
+  const prefix = config.prefix || ''
   const terminator = config.important ? ' !important;' : ';'
 
   const util = {
     simple: (className, property, value) =>
-      `.${className} { ${property}: ${value}${terminator} }\n`,
+      `.${join(prefix, className)} { ${property}: ${value}${terminator} }\n`,
     responsive: (minWidth, breakpointName, className, property, value) =>
-      `@media (min-width: ${minWidth}) { .${breakpointName}\\:${className} { ${property}: ${value}${terminator} } }\n`,
+      `@media (min-width: ${minWidth}) { .${breakpointName}\\:${join(
+        prefix,
+        className
+      )} { ${property}: ${value}${terminator} } }\n`,
     pseudo: (pseudo, className, property, value) =>
-      `.${pseudo}\\:${className}:${pseudo} { ${property}: ${value}${terminator} }\n`,
+      `.${pseudo}\\:${join(
+        prefix,
+        className
+      )}:${pseudo} { ${property}: ${value}${terminator} }\n`,
   }
 
   let css = ''

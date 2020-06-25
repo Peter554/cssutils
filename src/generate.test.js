@@ -53,6 +53,23 @@ generate:
       expect(css).toContain(`.color-blue { color: #00f; }`)
     })
 
+    it('generates utils with prefix', () => {
+      const config = `
+generate:
+  color:
+    from:
+      red: '#f00'
+      green: '#0f0'
+      blue: '#00f'
+prefix: app`
+
+      css = generate(YAML.parse(config))
+
+      expect(css).toContain(`.app-color-red { color: #f00; }`)
+      expect(css).toContain(`.app-color-green { color: #0f0; }`)
+      expect(css).toContain(`.app-color-blue { color: #00f; }`)
+    })
+
     it('generates utils with !important', () => {
       const config = `
 generate:
