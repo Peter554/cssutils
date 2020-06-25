@@ -1,6 +1,6 @@
 {
   "name": "@peter554/cssutils",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "scripts": {
     "test": "jest",
     "prettier": "prettier --write '**/*.(js|json)'"
