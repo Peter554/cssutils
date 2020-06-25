@@ -6,6 +6,18 @@ const rotate = (key, rotation) => {
   if (!rotation) {
     return key
   }
+  if (rotation == 'x') {
+    return [rotate(key, 'l'), rotate(key, 'r')]
+  }
+  if (rotation == 'y') {
+    return [rotate(key, 't'), rotate(key, 'b')]
+  }
+  rotation = {
+    l: 'left',
+    r: 'right',
+    t: 'top',
+    b: 'bottom',
+  }[rotation]
   const rotations = {
     'border-width': (rotation) => `border-${rotation}-width`,
   }
@@ -41,19 +53,29 @@ const generate = (config) => {
         prefix,
         className
       )} { ${mapProperties(properties, value, terminator)} } }\n`,
-    pseudo: (pseudo, className, properties, value) =>
-      `.${pseudo}\\:${join(prefix, className)}:${pseudo} { ${mapProperties(
-        properties,
-        value,
-        terminator
-      )} }\n`,
+    pseudo: (pseudoName, pseudoClasses, className, properties, value) => {
+      return (typeof pseudoClasses == 'object'
+        ? pseudoClasses
+        : [pseudoClasses]
+      ).map(
+        (pseudoClass) =>
+          `.${pseudoName}\\:${join(
+            prefix,
+            className
+          )}:${pseudoClass} { ${mapProperties(
+            properties,
+            value,
+            terminator
+          )} }\n`
+      ).join('')
+    },
   }
 
   let css = ''
 
   if (config.variables) {
     const s = []
-    for (const [k1, v1] of entries(config.variables || {})) {
+    for (const [k1, v1] of entries(config.variables)) {
       for (const [k2, v2] of entries(v1)) {
         if (typeof v2 == 'object') {
           for (const [k3, v3] of entries(v2)) {
@@ -65,14 +87,26 @@ const generate = (config) => {
       }
     }
     css += s.sort().join('') + '\n'
+
+    if (config.usevariables) {
+      for (const [k1, v1] of entries(config.variables)) {
+        for (const [k2, v2] of entries(v1)) {
+          if (typeof v2 == 'object') {
+            for (const [k3, v3] of entries(v2)) {
+              config.variables[k1][k2][k3] = `var(--${join(k1, k2, k3)})`
+            }
+          } else {
+            config.variables[k1][k2] = `var(--${join(k1, k2)})`
+          }
+        }
+      }
+    }
   }
 
   for (const [k1, v1] of entries(config.generate || {})) {
     const s = []
 
-    const rotations = v1.rotations
-      ? ['', 'left', 'right', 'top', 'bottom']
-      : ['']
+    const rotations = v1.rotations ? ['', 'l', 'r', 't', 'b', 'x', 'y'] : ['']
 
     for (const [k2, v2] of entries({
       ...(typeof v1.from == 'object' ? v1.from : config.variables[v1.from]),
@@ -122,7 +156,7 @@ const generate = (config) => {
         }
       }
 
-      ;(v1.pseudo || []).forEach((k3) => {
+      for (const [k3, v3] of entries(v1.pseudo || {})) {
         for (const [k4, v4] of typeof v2 == 'object'
           ? entries(v2)
           : [[k2, v2]]) {
@@ -130,6 +164,7 @@ const generate = (config) => {
             s.push(
               util.pseudo(
                 k3,
+                v3,
                 join(
                   v1.alias ? v1.alias : k1,
                   rotation,
@@ -141,33 +176,51 @@ const generate = (config) => {
             )
           })
         }
-      })
+      }
     }
     css += s.sort().join('') + '\n'
   }
 
   if (config.extras) {
-    if (config.extras.stack) {
-      const s = []
-      for (const [k1, v1] of entries({
-        ...(typeof config.extras.stack.from == 'object'
-          ? config.extras.stack.from
-          : config.variables[config.extras.stack.from]),
-        ...(config.extras.stack.alsofrom || {}),
-      })) {
-        s.push(
-          `.${join(prefix, 'stack', k1)} > * { margin-top: 0${terminator} } \n`
-        )
-        s.push(
-          `.${join(
-            prefix,
-            'stack',
-            k1
-          )} > * + * { margin-top: ${v1}${terminator} } \n`
-        )
+    ;['stack-x', 'stack-y', 'divide-x', 'divide-y'].forEach((extra) => {
+      if (config.extras[extra]) {
+        const property0 = {
+          'stack-x': 'margin-right',
+          'stack-y': 'margin-bottom',
+          'divide-x': 'border-right-width',
+          'divide-y': 'border-bottom-width',
+        }[extra]
+        const property1 = {
+          'stack-x': 'margin-left',
+          'stack-y': 'margin-top',
+          'divide-x': 'border-left-width',
+          'divide-y': 'border-top-width',
+        }[extra]
+        const s = []
+        for (const [k1, v1] of entries({
+          ...(typeof config.extras[extra].from == 'object'
+            ? config.extras[extra].from
+            : config.variables[config.extras[extra].from]),
+          ...(config.extras[extra].alsofrom || {}),
+        })) {
+          s.push(
+            `.${join(
+              prefix,
+              extra,
+              k1
+            )} > * { ${property0}: 0${terminator} ${property1}: 0${terminator} } \n`
+          )
+          s.push(
+            `.${join(
+              prefix,
+              extra,
+              k1
+            )} > * + * { ${property1}: ${v1}${terminator} } \n`
+          )
+        }
+        css += s.sort().join('') + '\n'
       }
-      css += s.sort().join('') + '\n'
-    }
+    })
   }
 
   return css.trim()

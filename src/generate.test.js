@@ -243,14 +243,25 @@ generate:
     from:
       red: '#f00'
       green: '#0f0'
-    pseudo: [hover, focus]`
+    pseudo:
+      hvr: hover
+      fcs: [focus]
+      act: [hover, focus, active]`
 
       css = generate(YAML.parse(config))
 
-      expect(css).toContain(`.hover\\:color-red:hover { color: #f00; }`)
-      expect(css).toContain(`.focus\\:color-red:focus { color: #f00; }`)
-      expect(css).toContain(`.hover\\:color-green:hover { color: #0f0; }`)
-      expect(css).toContain(`.focus\\:color-green:focus { color: #0f0; }`)
+      expect(css).toContain(`.hvr\\:color-red:hover { color: #f00; }`)
+      expect(css).toContain(`.fcs\\:color-red:focus { color: #f00; }`)
+
+      expect(css).toContain(`.hvr\\:color-green:hover { color: #0f0; }`)
+      expect(css).toContain(`.fcs\\:color-green:focus { color: #0f0; }`)
+
+      expect(css).toContain(`.act\\:color-red:hover { color: #f00; }`)
+      expect(css).toContain(`.act\\:color-red:focus { color: #f00; }`)
+      expect(css).toContain(`.act\\:color-red:active { color: #f00; }`)
+      expect(css).toContain(`.act\\:color-green:hover { color: #0f0; }`)
+      expect(css).toContain(`.act\\:color-green:focus { color: #0f0; }`)
+      expect(css).toContain(`.act\\:color-green:active { color: #0f0; }`)
     })
 
     it('generates util rotations', () => {
@@ -265,16 +276,28 @@ generate:
       css = generate(YAML.parse(config))
 
       expect(css).toContain(`.padding-md { padding: 0.5rem; }`)
-      expect(css).toContain(`.padding-top-md { padding-top: 0.5rem; }`)
-      expect(css).toContain(`.padding-bottom-md { padding-bottom: 0.5rem; }`)
-      expect(css).toContain(`.padding-left-md { padding-left: 0.5rem; }`)
-      expect(css).toContain(`.padding-right-md { padding-right: 0.5rem; }`)
+      expect(css).toContain(`.padding-t-md { padding-top: 0.5rem; }`)
+      expect(css).toContain(`.padding-b-md { padding-bottom: 0.5rem; }`)
+      expect(css).toContain(`.padding-l-md { padding-left: 0.5rem; }`)
+      expect(css).toContain(`.padding-r-md { padding-right: 0.5rem; }`)
+      expect(css).toContain(
+        `.padding-x-md { padding-left: 0.5rem; padding-right: 0.5rem; }`
+      )
+      expect(css).toContain(
+        `.padding-y-md { padding-top: 0.5rem; padding-bottom: 0.5rem; }`
+      )
 
       expect(css).toContain(`.padding-lg { padding: 1rem; }`)
-      expect(css).toContain(`.padding-top-lg { padding-top: 1rem; }`)
-      expect(css).toContain(`.padding-bottom-lg { padding-bottom: 1rem; }`)
-      expect(css).toContain(`.padding-left-lg { padding-left: 1rem; }`)
-      expect(css).toContain(`.padding-right-lg { padding-right: 1rem; }`)
+      expect(css).toContain(`.padding-t-lg { padding-top: 1rem; }`)
+      expect(css).toContain(`.padding-b-lg { padding-bottom: 1rem; }`)
+      expect(css).toContain(`.padding-l-lg { padding-left: 1rem; }`)
+      expect(css).toContain(`.padding-r-lg { padding-right: 1rem; }`)
+      expect(css).toContain(
+        `.padding-x-lg { padding-left: 1rem; padding-right: 1rem; }`
+      )
+      expect(css).toContain(
+        `.padding-y-lg { padding-top: 1rem; padding-bottom: 1rem; }`
+      )
     })
 
     it('generates utils with alsofrom', () => {
@@ -311,7 +334,9 @@ generate:
       md: 0.5rem
       lg: 1rem
     responsive: true
-    pseudo: [hover, focus]
+    pseudo:
+      hover: hover
+      focus: [focus]
     rotations: true
 breakpoints:
   md: 800px
@@ -325,20 +350,29 @@ breakpoints:
         '@media (min-width: 800px) { .md\\:padding-md { padding: 0.5rem; } }'
       )
       expect(css).toContain('.hover\\:padding-md:hover { padding: 0.5rem; }')
-      expect(css).toContain('.padding-top-md { padding-top: 0.5rem; }')
-
+      expect(css).toContain('.padding-t-md { padding-top: 0.5rem; }')
       expect(css).toContain(
-        '@media (min-width: 800px) { .md\\:padding-left-md { padding-left: 0.5rem; } }'
-      )
-      expect(css).toContain(
-        '@media (min-width: 1200px) { .lg\\:padding-bottom-lg { padding-bottom: 1rem; } }'
+        '.padding-y-md { padding-top: 0.5rem; padding-bottom: 0.5rem; }'
       )
 
       expect(css).toContain(
-        '.hover\\:padding-right-lg:hover { padding-right: 1rem; }'
+        '@media (min-width: 800px) { .md\\:padding-l-md { padding-left: 0.5rem; } }'
       )
       expect(css).toContain(
-        '.hover\\:padding-bottom-md:hover { padding-bottom: 0.5rem; }'
+        '@media (min-width: 1200px) { .lg\\:padding-b-lg { padding-bottom: 1rem; } }'
+      )
+      expect(css).toContain(
+        '@media (min-width: 1200px) { .lg\\:padding-y-lg { padding-top: 1rem; padding-bottom: 1rem; } }'
+      )
+
+      expect(css).toContain(
+        '.hover\\:padding-r-lg:hover { padding-right: 1rem; }'
+      )
+      expect(css).toContain(
+        '.hover\\:padding-b-md:hover { padding-bottom: 0.5rem; }'
+      )
+      expect(css).toContain(
+        '.hover\\:padding-x-md:hover { padding-left: 0.5rem; padding-right: 0.5rem; }'
       )
     })
 
@@ -353,7 +387,9 @@ generate:
         200: '#eeeeee'
         300: '#e0e0e0'
     responsive: true
-    pseudo: [hover, focus]
+    pseudo:
+      hover: hover
+      focus: focus
     rotations: true
 breakpoints:
   md: 800px
@@ -370,40 +406,59 @@ breakpoints:
         '.hover\\:bg-color-gray-300:hover { background-color: #e0e0e0; }'
       )
       expect(css).toContain(
-        '.bg-color-left-gray-100 { background-color-left: #f5f5f5; }'
+        '.bg-color-l-gray-100 { background-color-left: #f5f5f5; }'
       )
 
       expect(css).toContain(
-        '@media (min-width: 1200px) { .lg\\:bg-color-right-gray-200 { background-color-right: #eeeeee; } }'
+        '@media (min-width: 1200px) { .lg\\:bg-color-r-gray-200 { background-color-right: #eeeeee; } }'
       )
       expect(css).toContain(
-        '.hover\\:bg-color-top-gray-300:hover { background-color-top: #e0e0e0; }'
+        '.hover\\:bg-color-t-gray-300:hover { background-color-top: #e0e0e0; }'
       )
+    })
+
+    it('can generate with option usevariables', () => {
+      const config = `
+variables:
+  clr:
+    red: '#f00'
+    green: '#0f0'
+    blue: '#00f'
+generate:
+  color:
+    from: clr
+usevariables: true`
+
+      css = generate(YAML.parse(config))
+
+      expect(css).toContain(`.color-red { color: var(--clr-red); }`)
+      expect(css).toContain(`.color-green { color: var(--clr-green); }`)
+      expect(css).toContain(`.color-blue { color: var(--clr-blue); }`)      
     })
   })
 
   describe('extras', () => {
-    describe('stack', () => {
+    describe('stack/divide', () => {
       it('generates stack', () => {
         const config = `
 extras:
-  stack:
+  stack-y:
     from:
       md: 0.5rem
       lg: 1rem`
 
         const css = generate(YAML.parse(config))
 
-        expect(css).toContain(`.stack-md > * { margin-top: 0; }`)
-        expect(css).toContain(`.stack-md > * + * { margin-top: 0.5rem; }`)
-        expect(css).toContain(`.stack-lg > * { margin-top: 0; }`)
-        expect(css).toContain(`.stack-lg > * + * { margin-top: 1rem; }`)
+        expect(css).toContain(`.stack-y-md > * { margin-bottom: 0; margin-top: 0; }`)
+        expect(css).toContain(`.stack-y-md > * + * { margin-top: 0.5rem; }`)
+        expect(css).toContain(`.stack-y-lg > * { margin-bottom: 0; margin-top: 0; }`)
+        expect(css).toContain(`.stack-y-lg > * + * { margin-top: 1rem; }`)
       })
 
       it('generates stack with prefix and !important', () => {
         const config = `
 extras:
-  stack:
+  stack-x:
     from:
       md: 0.5rem
       lg: 1rem
@@ -412,13 +467,17 @@ important: true`
 
         const css = generate(YAML.parse(config))
 
-        expect(css).toContain(`.app-stack-md > * { margin-top: 0 !important; }`)
         expect(css).toContain(
-          `.app-stack-md > * + * { margin-top: 0.5rem !important; }`
+          `.app-stack-x-md > * { margin-right: 0 !important; margin-left: 0 !important; }`
         )
-        expect(css).toContain(`.app-stack-lg > * { margin-top: 0 !important; }`)
         expect(css).toContain(
-          `.app-stack-lg > * + * { margin-top: 1rem !important; }`
+          `.app-stack-x-md > * + * { margin-left: 0.5rem !important; }`
+        )
+        expect(css).toContain(
+          `.app-stack-x-lg > * { margin-right: 0 !important; margin-left: 0 !important; }`
+        )
+        expect(css).toContain(
+          `.app-stack-x-lg > * + * { margin-left: 1rem !important; }`
         )
       })
 
@@ -429,15 +488,19 @@ variables:
     md: 0.5rem
     lg: 1rem
 extras:
-  stack:
+  divide-x:
       from: size`
 
         const css = generate(YAML.parse(config))
 
-        expect(css).toContain(`.stack-md > * { margin-top: 0; }`)
-        expect(css).toContain(`.stack-md > * + * { margin-top: 0.5rem; }`)
-        expect(css).toContain(`.stack-lg > * { margin-top: 0; }`)
-        expect(css).toContain(`.stack-lg > * + * { margin-top: 1rem; }`)
+        expect(css).toContain(`.divide-x-md > * { border-right-width: 0; border-left-width: 0; }`)
+        expect(css).toContain(
+          `.divide-x-md > * + * { border-left-width: 0.5rem; }`
+        )
+        expect(css).toContain(`.divide-x-lg > * { border-right-width: 0; border-left-width: 0; }`)
+        expect(css).toContain(
+          `.divide-x-lg > * + * { border-left-width: 1rem; }`
+        )
       })
 
       it('generates stack with alsofrom', () => {
@@ -447,19 +510,25 @@ variables:
     md: 0.5rem
     lg: 1rem
 extras:
-  stack:
+  divide-y:
       from: size
       alsofrom:
         sm: 0.25rem`
 
         const css = generate(YAML.parse(config))
 
-        expect(css).toContain(`.stack-sm > * { margin-top: 0; }`)
-        expect(css).toContain(`.stack-sm > * + * { margin-top: 0.25rem; }`)
-        expect(css).toContain(`.stack-md > * { margin-top: 0; }`)
-        expect(css).toContain(`.stack-md > * + * { margin-top: 0.5rem; }`)
-        expect(css).toContain(`.stack-lg > * { margin-top: 0; }`)
-        expect(css).toContain(`.stack-lg > * + * { margin-top: 1rem; }`)
+        expect(css).toContain(`.divide-y-sm > * { border-bottom-width: 0; border-top-width: 0; }`)
+        expect(css).toContain(
+          `.divide-y-sm > * + * { border-top-width: 0.25rem; }`
+        )
+        expect(css).toContain(`.divide-y-md > * { border-bottom-width: 0; border-top-width: 0; }`)
+        expect(css).toContain(
+          `.divide-y-md > * + * { border-top-width: 0.5rem; }`
+        )
+        expect(css).toContain(`.divide-y-lg > * { border-bottom-width: 0; border-top-width: 0; }`)
+        expect(css).toContain(
+          `.divide-y-lg > * + * { border-top-width: 1rem; }`
+        )
       })
     })
   })

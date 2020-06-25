@@ -6,62 +6,72 @@
 
 A CSS utility class generator. User friendly, simple, powerful. Inspired by [tailwindcss](https://github.com/tailwindcss/tailwindcss) and [gordon](https://github.com/hankchizljaw/goron).
 
-## Basic example
+## Example
 
-`cssutils --nomin config.yml` (`--nomin` flag disables CSS minification/optimization).
+`cssutils --nomin demo.yml` (`--nomin` flag disables CSS minification/optimization).
 
 ```yaml
-# config.yml
+# demo.yml
 variables:
   color:
     red: '#f00'
-    green: '#0f0'
+    gray:
+      light: '#ccc'
+      dark: '#333'
   size:
-    md: 0.5rem
-    lg: 1rem
+    1: 0.25rem
+    2: 0.5rem
 generate:
   color:
     from: color
   background-color:
-    alias: bg-color
+    alias: bgcolor
     from: color
-    pseudo: [hover]
+    pseudo:
+      hvr: hover
   padding:
-    alias: pad
+    alias: p
     from: size
     responsive: true
   margin:
+    alias: m
     from:
-      md: 0.25rem
+      1: 0.25rem
     rotations: true
 breakpoints:
   md: 800px
 ```
 
 ```css
-:root { --color-green: #0f0; }
+:root { --color-gray-dark: #333; }
+:root { --color-gray-light: #ccc; }
 :root { --color-red: #f00; }
-:root { --size-lg: 1rem; }
-:root { --size-md: 0.5rem; }
+:root { --size-1: 0.25rem; }
+:root { --size-2: 0.5rem; }
 
-.color-green { color: #0f0; }
-.color-red { color: #f00; }
+.color-gray-dark { color: var(--color-gray-dark); }
+.color-gray-light { color: var(--color-gray-light); }
+.color-red { color: var(--color-red); }
 
-.bg-color-green { background-color: #0f0; }
-.bg-color-red { background-color: #f00; }
-.hover\:bg-color-green:hover { background-color: #0f0; }
-.hover\:bg-color-red:hover { background-color: #f00; }
+.bgcolor-gray-dark { background-color: var(--color-gray-dark); }
+.bgcolor-gray-light { background-color: var(--color-gray-light); }
+.bgcolor-red { background-color: var(--color-red); }
+.hvr\:bgcolor-gray-dark:hover { background-color: var(--color-gray-dark); }
+.hvr\:bgcolor-gray-light:hover { background-color: var(--color-gray-light); }
+.hvr\:bgcolor-red:hover { background-color: var(--color-red); }
 
-.pad-lg { padding: 1rem; }
-.pad-md { padding: 0.5rem; }
-@media (min-width: 800px) { .md\:pad-lg { padding: 1rem; } }
-@media (min-width: 800px) { .md\:pad-md { padding: 0.5rem; } }
+.p-1 { padding: var(--size-1); }
+.p-2 { padding: var(--size-2); }
+@media (min-width: 800px) { .md\:p-1 { padding: var(--size-1); } }
+@media (min-width: 800px) { .md\:p-2 { padding: var(--size-2); } }
 
-.margin-bottom-md { margin-bottom: 0.25rem; }
-.margin-left-md { margin-left: 0.25rem; }
-.margin-md { margin: 0.25rem; }
-.margin-right-md { margin-right: 0.25rem; }
-.margin-top-md { margin-top: 0.25rem; }
+.m-1 { margin: 0.25rem; }
+.m-b-1 { margin-bottom: 0.25rem; }
+.m-l-1 { margin-left: 0.25rem; }
+.m-r-1 { margin-right: 0.25rem; }
+.m-t-1 { margin-top: 0.25rem; }
+.m-x-1 { margin-left: 0.25rem; margin-right: 0.25rem; }
+.m-y-1 { margin-top: 0.25rem; margin-bottom: 0.25rem; }
 ```
 
 ## Go further

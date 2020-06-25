@@ -1,0 +1,29 @@
+variables:
+  color:
+    red: '#f00'
+    gray:
+      light: '#ccc'
+      dark: '#333'
+  size:
+    1: 0.25rem
+    2: 0.5rem
+generate:
+  color:
+    from: color
+  background-color:
+    alias: bgcolor
+    from: color
+    pseudo:
+      hvr: hover
+  padding:
+    alias: p
+    from: size
+    responsive: true
+  margin:
+    alias: m
+    from:
+      1: 0.25rem
+    rotations: true
+breakpoints:
+  md: 800px
+usevariables: true
