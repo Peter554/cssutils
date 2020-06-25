@@ -37,7 +37,7 @@ program
     config = extname(config) == '.json' ? config : YAML.parse(config)
 
     css = generate(config)
-    css = cmd.nomin ? css : new CleanCSS().minify(css).styles
+    css = cmd.nomin ? css : new CleanCSS({ level: 2 }).minify(css).styles
 
     if (cmd.output) {
       let output = resolve(cmd.output)
