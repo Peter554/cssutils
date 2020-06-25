@@ -63,25 +63,29 @@ const generate = (config) => {
         })
       }
 
-      for (const [k3, v3] of entries(
-        (v1.responsive && config.breakpoints) || {}
-      )) {
-        for (const [k4, v4] of typeof v2 == 'object'
-          ? entries(v2)
-          : [[k2, v2]]) {
-          rotations.forEach((rotation) => {
-            css += util.responsive(
-              v3,
-              k3,
-              join(
-                v1.alias ? v1.alias : k1,
-                rotation,
-                k4 == k2 ? k2 : join(k2, k4)
-              ),
-              rotate(k1, rotation),
-              v4
-            )
-          })
+      if (v1.responsive && config.breakpoints) {
+        for (const [k3, v3] of entries(
+          typeof config.breakpoints == 'object'
+            ? config.breakpoints
+            : config.variables[config.breakpoints]
+        )) {
+          for (const [k4, v4] of typeof v2 == 'object'
+            ? entries(v2)
+            : [[k2, v2]]) {
+            rotations.forEach((rotation) => {
+              css += util.responsive(
+                v3,
+                k3,
+                join(
+                  v1.alias ? v1.alias : k1,
+                  rotation,
+                  k4 == k2 ? k2 : join(k2, k4)
+                ),
+                rotate(k1, rotation),
+                v4
+              )
+            })
+          }
         }
       }
 

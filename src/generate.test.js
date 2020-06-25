@@ -156,6 +156,36 @@ breakpoints:
       )
     })
 
+    it('generates responsive utils from variables', () => {
+      const config = `
+variables:
+  breakpoint:
+    md: 800px
+    lg: 1200px
+generate:
+  color:
+    from:
+        red: '#f00'
+        green: '#0f0'
+    responsive: true
+breakpoints: breakpoint`
+
+      css = generate(YAML.parse(config))
+
+      expect(css).toContain(
+        `@media (min-width: 800px) { .md\\:color-red { color: #f00; } }`
+      )
+      expect(css).toContain(
+        `@media (min-width: 1200px) { .lg\\:color-red { color: #f00; } }`
+      )
+      expect(css).toContain(
+        `@media (min-width: 800px) { .md\\:color-green { color: #0f0; } }`
+      )
+      expect(css).toContain(
+        `@media (min-width: 1200px) { .lg\\:color-green { color: #0f0; } }`
+      )
+    })
+
     it('generates pseudo utils', () => {
       const config = `
 generate:
