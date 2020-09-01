@@ -41,6 +41,30 @@ program
   })
 
 program
+  .command('sassvariables')
+  .description('Generate SASS/SCSS variables.')
+  .option(
+    '-c, --config <path>',
+    'Path to the configuration file (YAML or JSON).'
+  )
+  .option(
+    '-o, --output <path>',
+    'Path to write the output. If not provided will write to stdout.'
+  )
+  .action((cmd) => {
+    const config = getConfig(cmd.config)
+    const sass = generateVariables(config)
+    if (cmd.output) {
+      const output = resolve(cmd.output)
+      mkdir('-p', dirname(output))
+      writeFileSync(output, sass)
+      log.success(`SASS has been written to ${output}.`)
+    } else {
+      console.log(sass)
+    }
+  })
+
+program
   .command('utils')
   .description('Generate utility classes.')
   .option(

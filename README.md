@@ -32,6 +32,27 @@ variables:
 :root { --color-red: #f00; }
 ```
 
+### SASS/SCSS variables
+
+- `cssutils sassvariables --config ./config.yml`
+
+```yml
+variables:
+  color:
+    red: '#f00'
+    green: '#0f0'
+    grey:
+      light: '#eee'
+      mid: '#999'
+```
+
+```scss
+$color-green: #0f0;
+$color-grey-light: #eee;
+$color-grey-mid: #999;
+$color-red: #f00;
+```
+
 ### Utility classes
 
 - `cssutils utils --config ./config.yml --no-min`
