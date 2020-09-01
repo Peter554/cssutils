@@ -2,37 +2,18 @@
 
 [![Build Status](https://travis-ci.org/Peter554/cssutils.svg?branch=master)](https://travis-ci.org/Peter554/cssutils)
 
-`npm install -g @peter554/cssutils`
+`npm install --save-dev @peter554/cssutils`
 
 A CSS utility class generator. User friendly, simple, powerful. Inspired by [tailwindcss](https://github.com/tailwindcss/tailwindcss) and [gordon](https://github.com/hankchizljaw/goron).
-
-<!-- toc -->
-
-- [Usage](#usage)
-  * [Custom properties](#custom-properties)
-  * [Utility classes](#utility-classes)
-  * [Responsive utility classes](#responsive-utility-classes)
-  * [Pseudo utility classes](#pseudo-utility-classes)
-  * [Rotations](#rotations)
-  * [Custom property substitution](#custom-property-substitution)
-  * [Themes](#themes)
-  * [!important & prefix](#important--prefix)
-- [More features & examples](#more-features--examples)
-
-<!-- tocstop -->
 
 ## Usage
 
 - `cssutils --help`
-- `cssutils --config config.yml --nomin`
+- Check out the tests for the full features.
 
-Configuration file (YAML or JSON) is specified by the option `--config`, or discovered via [cosmiconfig](https://github.com/davidtheclark/cosmiconfig).
+### CSS variables
 
-`--nomin` flag disables CSS minification/optimization.
-
-CSS is written to stdout, or the location specified by the `--output` option.
-
-### Custom properties
+- `cssutils variables --config ./config.yml --no-min`
 
 ```yml
 variables:
@@ -53,7 +34,7 @@ variables:
 
 ### Utility classes
 
-Utility classes may be generated from variables:
+- `cssutils utils --config ./config.yml --no-min`
 
 ```yml
 variables:
@@ -64,45 +45,8 @@ generate:
   background-color:
     alias: bgclr
     from: color
-```
-
-```css
-:root { --color-green: #0f0; }
-:root { --color-red: #f00; }
-
-.bgclr-green { background-color: #0f0; }
-.bgclr-red { background-color: #f00; }
-```
-
-By default custom properties are generated. We can disable this by setting `customproperties: false`.
-
-```yml
-variables:
-  color:
-    red: '#f00'
-    green: '#0f0'
-generate:
-  background-color:
-    alias: bgclr
-    from: color
-customproperties: false
-```
-
-```css
-.bgclr-green { background-color: #0f0; }
-.bgclr-red { background-color: #f00; }
-```
-
-We can also generate utility classes from their "own" data:
-
-```yml
-generate:
-  background-color:
-    alias: bgclr
-    from:
-      red: '#f00'
-      green: '#0f0'
   padding:
+    alias: p
     from:
       0: 0
       1: 0.25rem
@@ -112,11 +56,11 @@ generate:
 .bgclr-green { background-color: #0f0; }
 .bgclr-red { background-color: #f00; }
 
-.padding-0 { padding: 0; }
-.padding-1 { padding: 0.25rem; }
+.p-0 { padding: 0; }
+.p-1 { padding: 0.25rem; }
 ```
 
-### Responsive utility classes
+#### Responsive utility classes
 
 ```yml
 generate:
@@ -136,7 +80,7 @@ breakpoints:
 @media (min-width: 1200px) { .lg\:bgclr-red { background-color: #f00; } }
 ```
 
-### Pseudo utility classes
+#### Pseudo utility classes
 
 ```yml
 generate:
@@ -155,7 +99,7 @@ pseudo:
 .hcs\:bgclr-red:focus { background-color: #f00; }
 ```
 
-### Rotations
+#### Rotations
 
 ```yml
 generate:
@@ -175,80 +119,3 @@ generate:
 .pad-x-1 { padding-left: 0.25rem; padding-right: 0.25rem; }
 .pad-y-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
 ```
-
-### Custom property substitution
-
-By default custom properties are substituted into utility classes. This can be disabled.
-
-```yml
-variables:
-  color:
-    red: '#f00'
-    green: '#0f0'
-generate:
-  background-color:
-    alias: bgclr
-    from: color
-substitute: false
-```
-
-```css
-:root { --color-green: #0f0; }
-:root { --color-red: #f00; }
-
-.bgclr-green { background-color: var(--color-green); }
-.bgclr-red { background-color: var(--color-red); }
-```
-
-### Themes
-
-(Consider using together with option `substitute: false`)
-
-```yml
-variables:
-  color:
-    text: black
-    background: white
-themes:
-  dark:
-   color:
-    text: white
-    background: black
-```
-
-```css
-:root { --color-background: white; }
-:root { --color-text: black; }
-
-.theme-dark { --color-background: black; }
-.theme-dark { --color-text: white; }
-```
-
-### !important & prefix
-
-```yml
-variables:
-  color:
-    red: '#f00'
-    green: '#0f0'
-generate:
-  background-color:
-    alias: bgclr
-    from: color
-prefix: app
-important: true
-```
-
-```css
-:root { --app-color-green: #0f0; }
-:root { --app-color-red: #f00; }
-
-.app-bgclr-green { background-color: #0f0 !important; }
-.app-bgclr-red { background-color: #f00 !important; }
-```
-
-## More features & examples
-
-- Check out a more complete example -> [example](https://github.com/Peter554/cssutils/blob/master/example).
-
-- Check out the tests -> [`generate.test.js`](https://github.com/Peter554/cssutils/blob/master/src/generate.test.js).

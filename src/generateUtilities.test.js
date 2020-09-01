@@ -1,106 +1,9 @@
 const YAML = require('yaml')
 
-const { generate, _sortFunc } = require('./generate')
+const { generateUtilities, _sortFunc } = require('./generateUtilities')
 
-describe('generate', () => {
-  describe('variables', () => {
-    it('generates variables', () => {
-      const config = `
-variables:
-  color:
-    red: '#f00'
-    green: '#0f0'
-    blue: '#00f'`
-
-      css = generate(YAML.parse(config))
-
-      expect(css).toContain(':root { --color-red: #f00; }')
-      expect(css).toContain(':root { --color-green: #0f0; }')
-      expect(css).toContain(':root { --color-blue: #00f; }')
-    })
-
-    it('generates variables with prefix', () => {
-      const config = `
-variables:
-  color:
-    red: '#f00'
-    green: '#0f0'
-    blue: '#00f'
-prefix: app`
-
-      css = generate(YAML.parse(config))
-
-      expect(css).toContain(':root { --app-color-red: #f00; }')
-      expect(css).toContain(':root { --app-color-green: #0f0; }')
-      expect(css).toContain(':root { --app-color-blue: #00f; }')
-    })
-
-    it('generates nested variables', () => {
-      const config = `
-variables:
-  color:
-    gray:
-      100: '#f5f5f5'
-      200: '#eeeeee'
-      300: '#e0e0e0'`
-
-      css = generate(YAML.parse(config))
-
-      expect(css).toContain(':root { --color-gray-100: #f5f5f5; }')
-      expect(css).toContain(':root { --color-gray-200: #eeeeee; }')
-      expect(css).toContain(':root { --color-gray-300: #e0e0e0; }')
-    })
-
-    it('generates themes', () => {
-      const config = `
-variables:
-  color:
-    text: black
-    background: white
-    border:
-      simple: gray
-themes:
-  dark:
-    color:
-      text: white
-      background: black
-      border:
-        simple: red
-generate:
-  color:
-    alias: clr
-    from: color`
-
-      css = generate(YAML.parse(config))
-
-      expect(css).toContain(':root { --color-text: black; }')
-      expect(css).toContain(':root { --color-background: white; }')
-      expect(css).toContain(':root { --color-border-simple: gray; }')
-
-      expect(css).toContain('.theme-dark { --color-text: white; }')
-      expect(css).toContain('.theme-dark { --color-background: black; }')
-      expect(css).toContain('.theme-dark { --color-border-simple: red; }')
-    })
-
-    it('does not generate variables if customproperties=false', () => {
-      let config = `
-variables:
-  color:
-    red: '#f00'
-customproperties: false`
-
-      config = YAML.parse(config)
-
-      css = generate(config)
-      expect(css).not.toContain(':root { --color-red: #f00; }')
-
-      config.customproperties = true
-      css = generate(config)
-      expect(css).toContain(':root { --color-red: #f00; }')
-    })
-  })
-
-  describe('utils', () => {
+describe('generateUtilities', () => {
+  describe('utilities', () => {
     it('generates utils', () => {
       const config = `
 generate:
@@ -110,7 +13,7 @@ generate:
       green: '#0f0'
       blue: '#00f'`
 
-      css = generate(YAML.parse(config))
+      css = generateUtilities(YAML.parse(config))
 
       expect(css).toContain(`.color-red { color: #f00; }`)
       expect(css).toContain(`.color-green { color: #0f0; }`)
@@ -127,7 +30,7 @@ generate:
       blue: '#00f'
 prefix: app`
 
-      css = generate(YAML.parse(config))
+      css = generateUtilities(YAML.parse(config))
 
       expect(css).toContain(`.app-color-red { color: #f00; }`)
       expect(css).toContain(`.app-color-green { color: #0f0; }`)
@@ -144,7 +47,7 @@ generate:
       blue: '#00f'
 important: true`
 
-      css = generate(YAML.parse(config))
+      css = generateUtilities(YAML.parse(config))
 
       expect(css).toContain(`.color-red { color: #f00 !important; }`)
       expect(css).toContain(`.color-green { color: #0f0 !important; }`)
@@ -161,7 +64,7 @@ generate:
       green: '#0f0'
       blue: '#00f'`
 
-      css = generate(YAML.parse(config))
+      css = generateUtilities(YAML.parse(config))
 
       expect(css).toContain(`.colour-red { color: #f00; }`)
       expect(css).toContain(`.colour-green { color: #0f0; }`)
@@ -180,7 +83,7 @@ generate:
         200: '#eeeeee'
         300: '#e0e0e0'`
 
-      css = generate(YAML.parse(config))
+      css = generateUtilities(YAML.parse(config))
 
       expect(css).toContain(`.color-red { color: #f00; }`)
       expect(css).toContain(`.color-green { color: #0f0; }`)
@@ -200,7 +103,7 @@ generate:
   color:
     from: color`
 
-      css = generate(YAML.parse(config))
+      css = generateUtilities(YAML.parse(config))
 
       expect(css).toContain(`.color-red { color: #f00; }`)
       expect(css).toContain(`.color-green { color: #0f0; }`)
@@ -219,7 +122,7 @@ generate:
   color:
     from: color`
 
-      css = generate(YAML.parse(config))
+      css = generateUtilities(YAML.parse(config))
 
       expect(css).toContain(`.color-gray-100 { color: #f5f5f5; }`)
       expect(css).toContain(`.color-gray-200 { color: #eeeeee; }`)
@@ -238,7 +141,7 @@ breakpoints:
   md: 800px
   lg: 1200px`
 
-      css = generate(YAML.parse(config))
+      css = generateUtilities(YAML.parse(config))
 
       expect(css).toContain(
         `@media (min-width: 800px) { .md\\:color-red { color: #f00; } }`
@@ -268,7 +171,7 @@ generate:
     breakpoints: true
 breakpoints: breakpoint`
 
-      css = generate(YAML.parse(config))
+      css = generateUtilities(YAML.parse(config))
 
       expect(css).toContain(
         `@media (min-width: 800px) { .md\\:color-red { color: #f00; } }`
@@ -297,7 +200,7 @@ pseudo:
   fcs: [focus]
   act: [hover, focus, active]`
 
-      css = generate(YAML.parse(config))
+      css = generateUtilities(YAML.parse(config))
 
       expect(css).toContain(`.hvr\\:color-red:hover { color: #f00; }`)
       expect(css).toContain(`.fcs\\:color-red:focus { color: #f00; }`)
@@ -322,7 +225,7 @@ generate:
       lg: 1rem
     rotations: true`
 
-      css = generate(YAML.parse(config))
+      css = generateUtilities(YAML.parse(config))
 
       expect(css).toContain(`.padding-md { padding: 0.5rem; }`)
       expect(css).toContain(`.padding-t-md { padding-top: 0.5rem; }`)
@@ -366,7 +269,7 @@ breakpoints:
   md: 800px
   lg: 1200px`
 
-      css = generate(YAML.parse(config))
+      css = generateUtilities(YAML.parse(config))
 
       expect(css).toContain('.padding-md { padding: 0.5rem; }')
 
@@ -420,7 +323,7 @@ breakpoints:
   md: 800px
   lg: 1200px`
 
-      css = generate(YAML.parse(config))
+      css = generateUtilities(YAML.parse(config))
 
       expect(css).toContain('.bg-color-gray-100 { background-color: #f5f5f5; }')
 
@@ -451,10 +354,9 @@ variables:
     blue: '#00f'
 generate:
   color:
-    from: clr
-substitute: false`
+    from: clr`
 
-      css = generate(YAML.parse(config))
+      css = generateUtilities(YAML.parse(config), false)
 
       expect(css).toContain(`.color-red { color: var(--clr-red); }`)
       expect(css).toContain(`.color-green { color: var(--clr-green); }`)
@@ -471,10 +373,9 @@ variables:
 generate:
   color:
     from: color
-prefix: app
-substitute: false`
+prefix: app`
 
-      css = generate(YAML.parse(config))
+      css = generateUtilities(YAML.parse(config), false)
 
       expect(css).toContain(`.app-color-red { color: var(--app-color-red); }`)
       expect(css).toContain(
@@ -494,7 +395,7 @@ extras:
       md: 0.5rem
       lg: 1rem`
 
-        const css = generate(YAML.parse(config))
+        const css = generateUtilities(YAML.parse(config))
 
         expect(css).toContain(`.stack-y-md > * { margin-bottom: 0; }`)
         expect(css).toContain(`.stack-y-md > *:first-child { margin-top: 0; }`)
@@ -514,7 +415,7 @@ extras:
 prefix: app
 important: true`
 
-        const css = generate(YAML.parse(config))
+        const css = generateUtilities(YAML.parse(config))
 
         expect(css).toContain(
           `.app-stack-x-md > * { margin-right: 0 !important; }`
@@ -546,7 +447,7 @@ extras:
   divide-x:
       from: size`
 
-        const css = generate(YAML.parse(config))
+        const css = generateUtilities(YAML.parse(config))
 
         expect(css).toContain(`.divide-x-md > * { border-right-width: 0; }`)
         expect(css).toContain(

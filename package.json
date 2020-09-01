@@ -1,7 +1,7 @@
 {
   "name": "@peter554/cssutils",
-  "version": "0.9.1",
-  "description": "A CSS utility class generator. User friendly, simple, powerful.",
+  "version": "0.10.0",
+  "description": "CSS utility class generator. User friendly, simple, powerful.",
   "keywords": [
     "css",
     "functional css",
@@ -14,14 +14,11 @@
   "scripts": {
     "test": "jest",
     "prettier:check": "prettier --check src",
-    "build:docs": "npm run example:css && node dev/makeReadme.js",
-    "example:start": "http-server example",
-    "example:css": "node src/cli.js -nm -c example/cssutils.yml -o example/utils.css"
+    "build:docs": "node dev/makeReadme.js"
   },
   "files": [
     "src/"
   ],
-  "main": "./src/generate.js",
   "bin": {
     "cssutils": "./src/cli.js"
   },
@@ -33,9 +30,7 @@
     "yaml": "^1.10.0"
   },
   "devDependencies": {
-    "http-server": "^0.12.3",
     "jest": "^26.1.0",
-    "markdown-toc": "^1.2.0",
     "prettier": "^2.0.5"
   }
 }
