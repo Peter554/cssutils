@@ -1,68 +1,89 @@
 #!/usr/bin/env node
 
-const { existsSync, readFileSync, writeFileSync } = require('fs')
-const { resolve, dirname, extname } = require('path')
+const { writeFileSync } = require('fs')
+const { resolve, dirname } = require('path')
 
 const { program } = require('commander')
-const YAML = require('yaml')
 const { mkdir } = require('shelljs')
 const CleanCSS = require('clean-css')
-const { cosmiconfigSync } = require('cosmiconfig')
 
-const { generate } = require('./generate')
+const { getConfig } = require('./config')
+const log = require('./log')
+const { generateVariables } = require('./generateVariables')
+const { generateSassVariables } = require('./generateSassVariables')
+const { generateUtilities } = require('./generateUtilities')
 
-const log = {
-  success: (s) => console.log(s),
-  error: (s) => console.error(s),
-}
-
-const getConfig = (cmd) => {
-  let config
-  if (cmd.config) {
-    config = resolve(cmd.config)
-
-    if (!existsSync(config)) {
-      log.error(`Configuration file ${config} does not exist.`)
-      process.exit(1)
-    }
-
-    config = readFileSync(config, 'utf8')
-    config =
-      extname(config) == '.json' ? JSON.parse(config) : YAML.parse(config)
-  } else {
-    const explorer = cosmiconfigSync('cssutils', {
-      searchPlaces: ['cssutils.yml', 'cssutils.yaml', 'cssutils.json'],
-    })
-    const searchResult = explorer.search()
-
-    if (!searchResult) {
-      log.error(`Configuration file discovery failed.`)
-      process.exit(1)
-    }
-
-    config = searchResult.config
-  }
-  return config
-}
+program.name('cssutils')
 
 program
-  .name('cssutils')
+  .command('variables')
+  .description('Generate CSS variables (custom properties).')
   .option(
     '-c, --config <path>',
-    'Path to the configuration file (YAML or JSON). If missing configuration will be discovered via cosmiconfig.'
+    'Path to the configuration file (YAML or JSON).'
   )
   .option(
     '-o, --output <path>',
-    'Output path for generated CSS. If missing CSS is written to stdout.'
+    'Path to write the output. If not provided will write to stdout.'
   )
-  .option('-nm, --nomin', 'Disable CSS minification.')
+  .option('-nm, --no-min', 'Disable CSS minification.')
   .action((cmd) => {
-    const config = getConfig(cmd)
-    css = generate(config)
-    css = cmd.nomin ? css : new CleanCSS({ level: 2 }).minify(css).styles
-
+    const config = getConfig(cmd.config)
+    let css = generateVariables(config)
+    css = cmd.min ? new CleanCSS({ level: 2 }).minify(css).styles : css
     if (cmd.output) {
-      let output = resolve(cmd.output)
+      const output = resolve(cmd.output)
+      mkdir('-p', dirname(output))
+      writeFileSync(output, css)
+      log.success(`CSS has been written to ${output}.`)
+    } else {
+      console.log(css)
+    }
+  })
+
+program
+  .command('sassvariables')
+  .description('Generate SASS/SCSS variables.')
+  .option(
+    '-c, --config <path>',
+    'Path to the configuration file (YAML or JSON).'
+  )
+  .option(
+    '-o, --output <path>',
+    'Path to write the output. If not provided will write to stdout.'
+  )
+  .action((cmd) => {
+    const config = getConfig(cmd.config)
+    const sass = generateSassVariables(config)
+    if (cmd.output) {
+      const output = resolve(cmd.output)
+      mkdir('-p', dirname(output))
+      writeFileSync(output, sass)
+      log.success(`SASS has been written to ${output}.`)
+    } else {
+      console.log(sass)
+    }
+  })
+
+program
+  .command('utils')
+  .description('Generate utility classes.')
+  .option(
+    '-c, --config <path>',
+    'Path to the configuration file (YAML or JSON).'
+  )
+  .option(
+    '-o, --output <path>',
+    'Path to write the output. If not provided will write to stdout.'
+  )
+  .option('-nm, --no-min', 'Disable CSS minification.')
+  .option('-ns, --no-substitute', 'Disable CSS variable substitution.')
+  .action((cmd) => {
+    const config = getConfig(cmd.config)
+    let css = generateUtilities(config, cmd.substitute)
+    css = cmd.min ? new CleanCSS({ level: 2 }).minify(css).styles : css
+    if (cmd.output) {
+      const output = resolve(cmd.output)
       mkdir('-p', dirname(output))
       writeFileSync(output, css)
       log.success(`CSS has been written to ${output}.`)
