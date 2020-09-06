@@ -1,3 +1,5 @@
+const { header } = require('./header')
+
 const entries = Object.entries
 
 const join = (...values) => values.filter((o) => !!o).join('-')
@@ -95,7 +97,7 @@ const generateUtilities = (config, substitute = true) => {
     },
   }
 
-  let css = ''
+  let css = header
 
   if (!substitute) {
     for (const [k1, v1] of entries(config.variables || {})) {

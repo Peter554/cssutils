@@ -1,3 +1,5 @@
+const { header } = require('./header')
+
 const entries = Object.entries
 
 const join = (...values) => values.filter((o) => !!o).join('-')
@@ -15,7 +17,7 @@ const generateVariables = (config) => {
   const themeVariable = (theme, name, value) =>
     `.theme-${theme} { --${join(prefix, name)}: ${value}; }\n`
 
-  let css = ''
+  let css = header
 
   let s = []
   for (const [k1, v1] of entries(config.variables)) {

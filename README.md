@@ -55,7 +55,7 @@ $color-red: #f00;
 
 ### Utility classes
 
-- `cssutils utils --config ./config.yml --no-min`
+- `cssutils utilities --config ./config.yml --no-min`
 
 ```yml
 variables:

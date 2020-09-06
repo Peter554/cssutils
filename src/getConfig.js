@@ -4,7 +4,7 @@ const { resolve, extname } = require('path')
 const YAML = require('yaml')
 const { cosmiconfigSync } = require('cosmiconfig')
 
-const log = require('./log')
+const log = require('./logging')
 
 const getConfig = (configPath) => {
   if (configPath) {

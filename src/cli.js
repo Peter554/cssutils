@@ -7,8 +7,8 @@ const { program } = require('commander')
 const { mkdir } = require('shelljs')
 const CleanCSS = require('clean-css')
 
-const { getConfig } = require('./config')
-const log = require('./log')
+const { getConfig } = require('./getConfig')
+const log = require('./logging')
 const { generateVariables } = require('./generateVariables')
 const { generateSassVariables } = require('./generateSassVariables')
 const { generateUtilities } = require('./generateUtilities')
@@ -26,7 +26,7 @@ program
     '-o, --output <path>',
     'Path to write the output. If not provided will write to stdout.'
   )
-  .option('-nm, --no-min', 'Disable CSS minification.')
+  .option('-nm, --no-min', 'Disable CSS minification/optimization.')
   .action((cmd) => {
     const config = getConfig(cmd.config)
     let css = generateVariables(config)
@@ -66,7 +66,7 @@ program
   })
 
 program
-  .command('utils')
+  .command('utilities')
   .description('Generate utility classes.')
   .option(
     '-c, --config <path>',
@@ -76,7 +76,7 @@ program
     '-o, --output <path>',
     'Path to write the output. If not provided will write to stdout.'
   )
-  .option('-nm, --no-min', 'Disable CSS minification.')
+  .option('-nm, --no-min', 'Disable CSS minification/optimization.')
   .option('-ns, --no-substitute', 'Disable CSS variable substitution.')
   .action((cmd) => {
     const config = getConfig(cmd.config)
