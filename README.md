@@ -1,6 +1,6 @@
 # cssutils
 
-[![Build Status](https://travis-ci.org/Peter554/cssutils.svg?branch=master)](https://travis-ci.org/Peter554/cssutils)
+![CI](https://github.com/Peter554/cssutils/workflows/CI/badge.svg)
 
 `npm install --save-dev @peter554/cssutils`
 

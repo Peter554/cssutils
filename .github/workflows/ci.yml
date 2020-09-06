@@ -1,0 +1,17 @@
+name: CI
+on: push
+jobs:
+  check-code:
+    name: Check the code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 10
+      - name: Install dependencies
+        run: npm install
+      - name: Check permissions
+        run: chmod +x ./dev/pre-commit
+      - name: Check code
+        run: ./dev/pre-commit
