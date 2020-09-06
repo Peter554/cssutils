@@ -89,10 +89,11 @@ utilities:
     alias: bgclr
     from:
       red: '#f00'
-    breakpoints: true
+    breakpoints: [md, lg]
 breakpoints:
   md: 800px
   lg: 1200px
+  xl: 1600px
 ```
 
 ```css
@@ -109,9 +110,10 @@ utilities:
     alias: bgclr
     from:
       red: '#f00'
-    pseudo: true
+    pseudo: [hcs]
 pseudo:
   hcs: [hover, focus]
+  act: [active]
 ```
 
 ```css

@@ -71,7 +71,7 @@ utilities:
       expect(css).toContain(`.colour-blue { color: #00f; }`)
     })
 
-    it('generates nested utils ', () => {
+    it('generates nested utils', () => {
       const config = `
 utilities:
   color:
@@ -129,17 +129,18 @@ utilities:
       expect(css).toContain(`.color-gray-300 { color: #e0e0e0; }`)
     })
 
-    it('generates breakpoints utils', () => {
+    it('generates breakpoint utils', () => {
       const config = `
 utilities:
   color:
     from:
         red: '#f00'
         green: '#0f0'
-    breakpoints: true
+    breakpoints: [md, lg]
 breakpoints:
   md: 800px
-  lg: 1200px`
+  lg: 1200px
+  xl: 1600px`
 
       css = generateUtilities(YAML.parse(config))
 
@@ -149,15 +150,21 @@ breakpoints:
       expect(css).toContain(
         `@media (min-width: 1200px) { .lg\\:color-red { color: #f00; } }`
       )
+      expect(css).not.toContain(
+        `@media (min-width: 1600px) { .xl\\:color-red { color: #f00; } }`
+      )
       expect(css).toContain(
         `@media (min-width: 800px) { .md\\:color-green { color: #0f0; } }`
       )
       expect(css).toContain(
         `@media (min-width: 1200px) { .lg\\:color-green { color: #0f0; } }`
       )
+      expect(css).not.toContain(
+        `@media (min-width: 1600px) { .xl\\:color-green { color: #0f0; } }`
+      )
     })
 
-    it('generates responsive utils from variables', () => {
+    it('generates breakpoint utils from variables', () => {
       const config = `
 variables:
   breakpoint:
@@ -194,7 +201,7 @@ utilities:
     from:
       red: '#f00'
       green: '#0f0'
-    pseudo: true
+    pseudo: [hvr, act]
 pseudo:
   hvr: hover
   fcs: [focus]
@@ -203,10 +210,10 @@ pseudo:
       css = generateUtilities(YAML.parse(config))
 
       expect(css).toContain(`.hvr\\:color-red:hover { color: #f00; }`)
-      expect(css).toContain(`.fcs\\:color-red:focus { color: #f00; }`)
+      expect(css).not.toContain(`.fcs\\:color-red:focus { color: #f00; }`)
 
       expect(css).toContain(`.hvr\\:color-green:hover { color: #0f0; }`)
-      expect(css).toContain(`.fcs\\:color-green:focus { color: #0f0; }`)
+      expect(css).not.toContain(`.fcs\\:color-green:focus { color: #0f0; }`)
 
       expect(css).toContain(`.act\\:color-red:hover { color: #f00; }`)
       expect(css).toContain(`.act\\:color-red:focus { color: #f00; }`)
@@ -303,7 +310,7 @@ breakpoints:
       )
     })
 
-    it('generates a complex nested util', () => {
+    it('generates a complex 2', () => {
       const config = `
 utilities:
   background-color:
@@ -313,8 +320,8 @@ utilities:
         100: '#f5f5f5'
         200: '#eeeeee'
         300: '#e0e0e0'
-    pseudo: true
-    breakpoints: true
+    pseudo: [focus]
+    breakpoints: [lg]
     rotations: true
 pseudo:
   hover: hover
@@ -327,10 +334,16 @@ breakpoints:
 
       expect(css).toContain('.bg-color-gray-100 { background-color: #f5f5f5; }')
 
+      expect(css).not.toContain(
+        '@media (min-width: 800) { .md\\:bg-color-gray-200 { background-color: #eeeeee; } }'
+      )
       expect(css).toContain(
         '@media (min-width: 1200px) { .lg\\:bg-color-gray-200 { background-color: #eeeeee; } }'
       )
       expect(css).toContain(
+        '.focus\\:bg-color-gray-300:focus { background-color: #e0e0e0; }'
+      )
+      expect(css).not.toContain(
         '.hover\\:bg-color-gray-300:hover { background-color: #e0e0e0; }'
       )
       expect(css).toContain(
@@ -340,7 +353,13 @@ breakpoints:
       expect(css).toContain(
         '@media (min-width: 1200px) { .lg\\:bg-color-r-gray-200 { background-color-right: #eeeeee; } }'
       )
+      expect(css).not.toContain(
+        '@media (min-width: 800px) { .md\\:bg-color-r-gray-200 { background-color-right: #eeeeee; } }'
+      )
       expect(css).toContain(
+        '.focus\\:bg-color-t-gray-300:focus { background-color-top: #e0e0e0; }'
+      )
+      expect(css).not.toContain(
         '.hover\\:bg-color-t-gray-300:hover { background-color-top: #e0e0e0; }'
       )
     })

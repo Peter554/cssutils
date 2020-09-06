@@ -42,6 +42,17 @@ const rotate = (key, rotation) => {
   }
 }
 
+const pick = (o, keys) => {
+  if (keys === true) {
+    return o
+  }
+  const r = {}
+  keys.forEach((k) => {
+    r[k] = o[k]
+  })
+  return r
+}
+
 const generateUtilities = (config, substitute = true) => {
   const prefix = config.prefix || ''
   const terminator = config.important ? ' !important;' : ';'
@@ -126,9 +137,12 @@ const generateUtilities = (config, substitute = true) => {
 
       if (v1.breakpoints && config.breakpoints) {
         for (const [k3, v3] of entries(
-          typeof config.breakpoints == 'object'
-            ? config.breakpoints
-            : config.variables[config.breakpoints]
+          pick(
+            typeof config.breakpoints == 'object'
+              ? config.breakpoints
+              : config.variables[config.breakpoints],
+            v1.breakpoints
+          )
         )) {
           for (const [k4, v4] of typeof v2 == 'object'
             ? entries(v2)
@@ -153,7 +167,7 @@ const generateUtilities = (config, substitute = true) => {
       }
 
       if (v1.pseudo && config.pseudo) {
-        for (const [k3, v3] of entries(config.pseudo)) {
+        for (const [k3, v3] of entries(pick(config.pseudo, v1.pseudo))) {
           for (const [k4, v4] of typeof v2 == 'object'
             ? entries(v2)
             : [[k2, v2]]) {
