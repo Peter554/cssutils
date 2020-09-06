@@ -6,7 +6,7 @@ describe('generateUtilities', () => {
   describe('utilities', () => {
     it('generates utils', () => {
       const config = `
-generate:
+utilities:
   color:
     from:
       red: '#f00'
@@ -22,7 +22,7 @@ generate:
 
     it('generates utils with prefix', () => {
       const config = `
-generate:
+utilities:
   color:
     from:
       red: '#f00'
@@ -39,7 +39,7 @@ prefix: app`
 
     it('generates utils with !important', () => {
       const config = `
-generate:
+utilities:
   color:
     from:
       red: '#f00'
@@ -56,7 +56,7 @@ important: true`
 
     it('generates utils with alias', () => {
       const config = `
-generate:
+utilities:
   color:
     alias: colour
     from:
@@ -73,7 +73,7 @@ generate:
 
     it('generates nested utils ', () => {
       const config = `
-generate:
+utilities:
   color:
     from:
       red: '#f00'
@@ -99,7 +99,7 @@ variables:
     red: '#f00'
     green: '#0f0'
     blue: '#00f'
-generate:
+utilities:
   color:
     from: color`
 
@@ -118,7 +118,7 @@ variables:
       100: '#f5f5f5'
       200: '#eeeeee'
       300: '#e0e0e0'
-generate:
+utilities:
   color:
     from: color`
 
@@ -131,7 +131,7 @@ generate:
 
     it('generates breakpoints utils', () => {
       const config = `
-generate:
+utilities:
   color:
     from:
         red: '#f00'
@@ -163,7 +163,7 @@ variables:
   breakpoint:
     md: 800px
     lg: 1200px
-generate:
+utilities:
   color:
     from:
         red: '#f00'
@@ -189,7 +189,7 @@ breakpoints: breakpoint`
 
     it('generates pseudo utils', () => {
       const config = `
-generate:
+utilities:
   color:
     from:
       red: '#f00'
@@ -218,7 +218,7 @@ pseudo:
 
     it('generates util rotations', () => {
       const config = `
-generate:
+utilities:
   padding:
     from:
       md: 0.5rem
@@ -254,7 +254,7 @@ generate:
 
     it('generates a complex util', () => {
       const config = `
-generate:
+utilities:
   padding:
     from:
       md: 0.5rem
@@ -305,7 +305,7 @@ breakpoints:
 
     it('generates a complex nested util', () => {
       const config = `
-generate:
+utilities:
   background-color:
     alias: bg-color
     from:
@@ -352,7 +352,7 @@ variables:
     red: '#f00'
     green: '#0f0'
     blue: '#00f'
-generate:
+utilities:
   color:
     from: clr`
 
@@ -370,7 +370,7 @@ variables:
     red: '#f00'
     green: '#0f0'
     blue: '#00f'
-generate:
+utilities:
   color:
     from: color
 prefix: app`

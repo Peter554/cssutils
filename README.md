@@ -62,7 +62,7 @@ variables:
   color:
     red: '#f00'
     green: '#0f0'
-generate:
+utilities:
   background-color:
     alias: bgclr
     from: color
@@ -84,7 +84,7 @@ generate:
 #### Responsive utility classes
 
 ```yml
-generate:
+utilities:
   background-color:
     alias: bgclr
     from:
@@ -104,7 +104,7 @@ breakpoints:
 #### Pseudo utility classes
 
 ```yml
-generate:
+utilities:
   background-color:
     alias: bgclr
     from:
@@ -123,7 +123,7 @@ pseudo:
 #### Rotations
 
 ```yml
-generate:
+utilities:
   padding:
     alias: pad
     from:

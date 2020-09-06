@@ -64,11 +64,7 @@ themes:
       text: white
       background: black
       border:
-        simple: red
-generate:
-  color:
-    alias: clr
-    from: color`
+        simple: red`
 
     css = generateVariables(YAML.parse(config))
 

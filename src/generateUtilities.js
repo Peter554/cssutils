@@ -100,7 +100,7 @@ const generateUtilities = (config, substitute = true) => {
     }
   }
 
-  for (const [k1, v1] of entries(config.generate || {})) {
+  for (const [k1, v1] of entries(config.utilities || {})) {
     const s = []
 
     const rotations = v1.rotations ? ['', 'l', 'r', 't', 'b', 'x', 'y'] : ['']
