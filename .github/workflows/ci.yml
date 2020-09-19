@@ -11,7 +11,5 @@ jobs:
           node-version: 10
       - name: Install dependencies
         run: npm install
-      - name: Check permissions
-        run: chmod +x ./dev/pre-commit
       - name: Check code
-        run: ./dev/pre-commit
+        run: npm run format:check && npm test

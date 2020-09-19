@@ -13,8 +13,8 @@
   "repository": "peter554/cssutils",
   "scripts": {
     "test": "jest",
-    "prettier:check": "prettier --check src",
-    "build:docs": "node dev/makeReadme.js"
+    "format:check": "prettier --check src",
+    "format:write": "prettier --write src"
   },
   "files": [
     "src/"
@@ -30,7 +30,13 @@
     "yaml": "^1.10.0"
   },
   "devDependencies": {
+    "husky": "^4.3.0",
     "jest": "^26.1.0",
     "prettier": "^2.0.5"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run format:check && npm test"
+    }
   }
 }
