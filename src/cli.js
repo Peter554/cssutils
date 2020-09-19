@@ -26,11 +26,9 @@ program
     "-o, --output <path>",
     "Path to write the output. If not provided will write to stdout."
   )
-  .option("-nm, --no-min", "Disable CSS minification/optimization.")
   .action((cmd) => {
     const config = getConfig(cmd.config);
     let css = generateVariables(config);
-    css = cmd.min ? new CleanCSS({ level: 2 }).minify(css).styles : css;
     if (cmd.output) {
       const output = resolve(cmd.output);
       mkdir("-p", dirname(output));
@@ -76,12 +74,10 @@ program
     "-o, --output <path>",
     "Path to write the output. If not provided will write to stdout."
   )
-  .option("-nm, --no-min", "Disable CSS minification/optimization.")
   .option("-ns, --no-substitute", "Disable CSS variable substitution.")
   .action((cmd) => {
     const config = getConfig(cmd.config);
     let css = generateUtilities(config, cmd.substitute);
-    css = cmd.min ? new CleanCSS({ level: 2 }).minify(css).styles : css;
     if (cmd.output) {
       const output = resolve(cmd.output);
       mkdir("-p", dirname(output));

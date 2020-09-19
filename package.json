@@ -1,6 +1,6 @@
 {
   "name": "@peter554/cssutils",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "CSS utility class generator. User friendly, simple, powerful.",
   "keywords": [
     "css",
@@ -23,7 +23,6 @@
     "cssutils": "./src/cli.js"
   },
   "dependencies": {
-    "clean-css": "^4.2.3",
     "commander": "^5.1.0",
     "cosmiconfig": "^6.0.0",
     "shelljs": "^0.8.4",

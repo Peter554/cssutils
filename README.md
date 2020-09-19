@@ -13,7 +13,7 @@ A CSS utility class generator. User friendly, simple, powerful. Inspired by [tai
 
 ### CSS variables
 
-- `cssutils variables --config ./config.yml --no-min`
+- `cssutils variables --config ./config.yml`
 
 ```yml
 variables:
@@ -55,7 +55,7 @@ $color-red: #f00;
 
 ### Utility classes
 
-- `cssutils utilities --config ./config.yml --no-min`
+- `cssutils utilities --config ./config.yml`
 
 ```yml
 variables:
