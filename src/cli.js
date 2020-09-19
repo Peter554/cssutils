@@ -5,10 +5,8 @@ const { resolve, dirname } = require("path");
 
 const { program } = require("commander");
 const { mkdir } = require("shelljs");
-const CleanCSS = require("clean-css");
 
 const { getConfig } = require("./getConfig");
-const log = require("./logging");
 const { generateVariables } = require("./generators/generateVariables");
 const { generateSassVariables } = require("./generators/generateSassVariables");
 const { generateUtilities } = require("./generators/generateUtilities");
@@ -33,7 +31,7 @@ program
       const output = resolve(cmd.output);
       mkdir("-p", dirname(output));
       writeFileSync(output, css);
-      log.success(`CSS has been written to ${output}.`);
+      console.log(`CSS has been written to ${output}.`);
     } else {
       console.log(css);
     }
@@ -57,7 +55,7 @@ program
       const output = resolve(cmd.output);
       mkdir("-p", dirname(output));
       writeFileSync(output, sass);
-      log.success(`SASS has been written to ${output}.`);
+      console.log(`SASS has been written to ${output}.`);
     } else {
       console.log(sass);
     }
@@ -82,7 +80,7 @@ program
       const output = resolve(cmd.output);
       mkdir("-p", dirname(output));
       writeFileSync(output, css);
-      log.success(`CSS has been written to ${output}.`);
+      console.log(`CSS has been written to ${output}.`);
     } else {
       console.log(css);
     }

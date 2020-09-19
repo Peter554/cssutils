@@ -8,12 +8,14 @@ A CSS utility class generator. User friendly, simple, powerful. Inspired by [tai
 
 ## Usage
 
-- `cssutils --help`
+- `cssutils --help` (CLI)
+- `const cssutils = require("@peter554/cssutils")` (API)
 - Check out the tests for the full features.
 
 ### CSS variables
 
 - `cssutils variables --config ./config.yml`
+- `cssutils.variables({configPath: "./config.yml"})`
 
 ```yml
 variables:
@@ -35,6 +37,7 @@ variables:
 ### SASS/SCSS variables
 
 - `cssutils sassvariables --config ./config.yml`
+- `cssutils.sassVariables({configPath: "./config.yml"})`
 
 ```yml
 variables:
@@ -56,6 +59,7 @@ $color-red: #f00;
 ### Utility classes
 
 - `cssutils utilities --config ./config.yml`
+- `cssutils.utilities({configPath: "./config.yml"})`
 
 ```yml
 variables:
