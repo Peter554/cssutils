@@ -1,4 +1,4 @@
-const { header } = require("./header");
+const { header } = require("../header");
 
 const entries = Object.entries;
 

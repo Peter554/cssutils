@@ -9,9 +9,9 @@ const CleanCSS = require("clean-css");
 
 const { getConfig } = require("./getConfig");
 const log = require("./logging");
-const { generateVariables } = require("./generateVariables");
-const { generateSassVariables } = require("./generateSassVariables");
-const { generateUtilities } = require("./generateUtilities");
+const { generateVariables } = require("./generators/generateVariables");
+const { generateSassVariables } = require("./generators/generateSassVariables");
+const { generateUtilities } = require("./generators/generateUtilities");
 
 program.name("cssutils");
 
