@@ -2,7 +2,11 @@ const { header } = require("../header");
 
 const entries = Object.entries;
 
-const join = (...values) => values.filter((o) => !!o).join("-");
+const join = (...values) =>
+  values
+    .filter((o) => !!o)
+    .filter((o) => o != "default")
+    .join("-");
 
 const generateSassVariables = (config) => {
   if (!config.variables) {

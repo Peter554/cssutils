@@ -1,6 +1,6 @@
 {
   "name": "@peter554/cssutils",
-  "version": "0.14.1",
+  "version": "0.15.0",
   "description": "CSS utility class generator. User friendly, simple, powerful.",
   "main": "./src/main.js",
   "keywords": [

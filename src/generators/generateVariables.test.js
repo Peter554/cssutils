@@ -39,11 +39,15 @@ prefix: app`;
 variables:
   color:
     gray:
+      default: '#cccccc'
       100: '#f5f5f5'
       200: '#eeeeee'
       300: '#e0e0e0'`;
 
     css = generateVariables(YAML.parse(config));
+
+    expect(css).toContain(":root { --color-gray: #cccccc; }");
+    expect(css).not.toContain("--color-gray-default");
 
     expect(css).toContain(":root { --color-gray-100: #f5f5f5; }");
     expect(css).toContain(":root { --color-gray-200: #eeeeee; }");

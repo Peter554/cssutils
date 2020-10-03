@@ -79,6 +79,7 @@ utilities:
       red: '#f00'
       green: '#0f0'
       gray:
+        default: '#cccccc'
         100: '#f5f5f5'
         200: '#eeeeee'
         300: '#e0e0e0'`;
@@ -87,6 +88,10 @@ utilities:
 
       expect(css).toContain(`.color-red { color: #f00; }`);
       expect(css).toContain(`.color-green { color: #0f0; }`);
+
+      expect(css).toContain(`.color-gray { color: #cccccc; }`);
+      expect(css).not.toContain(`.color-gray-default`);
+
       expect(css).toContain(`.color-gray-100 { color: #f5f5f5; }`);
       expect(css).toContain(`.color-gray-200 { color: #eeeeee; }`);
       expect(css).toContain(`.color-gray-300 { color: #e0e0e0; }`);
@@ -115,6 +120,7 @@ utilities:
 variables:
   color:
     gray:
+      default: '#cccccc'
       100: '#f5f5f5'
       200: '#eeeeee'
       300: '#e0e0e0'
@@ -123,6 +129,9 @@ utilities:
     from: color`;
 
       css = generateUtilities(YAML.parse(config));
+
+      expect(css).toContain(`.color-gray { color: #cccccc; }`);
+      expect(css).not.toContain(`.color-gray-default`);
 
       expect(css).toContain(`.color-gray-100 { color: #f5f5f5; }`);
       expect(css).toContain(`.color-gray-200 { color: #eeeeee; }`);
@@ -310,7 +319,7 @@ breakpoints:
       );
     });
 
-    it("generates a complex 2", () => {
+    it("generates a complex util 2", () => {
       const config = `
 utilities:
   background-color:
