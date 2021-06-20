@@ -199,54 +199,6 @@ const generateUtilities = (config, substitute = true) => {
     css += s.sort(sortFunc).join("") + "\n";
   }
 
-  if (config.extras) {
-    ["stack-x", "stack-y", "divide-x", "divide-y"].forEach((extra) => {
-      if (config.extras[extra]) {
-        const property0 = {
-          "stack-x": "margin-right",
-          "stack-y": "margin-bottom",
-          "divide-x": "border-right-width",
-          "divide-y": "border-bottom-width",
-        }[extra];
-        const property1 = {
-          "stack-x": "margin-left",
-          "stack-y": "margin-top",
-          "divide-x": "border-left-width",
-          "divide-y": "border-top-width",
-        }[extra];
-        const s = [];
-        for (const [k1, v1] of entries(
-          typeof config.extras[extra].from == "object"
-            ? config.extras[extra].from
-            : config.variables[config.extras[extra].from]
-        )) {
-          s.push(
-            `.${join(
-              prefix,
-              extra,
-              k1
-            )} > * { ${property0}: 0${terminator} } \n`
-          );
-          s.push(
-            `.${join(
-              prefix,
-              extra,
-              k1
-            )} > *:first-child { ${property1}: 0${terminator} } \n`
-          );
-          s.push(
-            `.${join(
-              prefix,
-              extra,
-              k1
-            )} > * + * { ${property1}: ${v1}${terminator} } \n`
-          );
-        }
-        css += s.sort().join("") + "\n";
-      }
-    });
-  }
-
   return css.trim();
 };
 
