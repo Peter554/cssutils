@@ -78,7 +78,7 @@ utilities:
       red: '#f00'
       green: '#0f0'
       gray:
-        default: '#cccccc'
+        DEFAULT: '#cccccc'
         100: '#f5f5f5'
         200: '#eeeeee'
         300: '#e0e0e0'`;
@@ -89,7 +89,7 @@ utilities:
     expect(css).toContain(`.color-green { color: #0f0; }`);
 
     expect(css).toContain(`.color-gray { color: #cccccc; }`);
-    expect(css).not.toContain(`.color-gray-default`);
+    expect(css).not.toContain(`.color-gray-DEFAULT`);
 
     expect(css).toContain(`.color-gray-100 { color: #f5f5f5; }`);
     expect(css).toContain(`.color-gray-200 { color: #eeeeee; }`);
@@ -119,7 +119,7 @@ utilities:
 variables:
   color:
     gray:
-      default: '#cccccc'
+      DEFAULT: '#cccccc'
       100: '#f5f5f5'
       200: '#eeeeee'
       300: '#e0e0e0'
@@ -130,7 +130,7 @@ utilities:
     css = generateUtilities(YAML.parse(config));
 
     expect(css).toContain(`.color-gray { color: #cccccc; }`);
-    expect(css).not.toContain(`.color-gray-default`);
+    expect(css).not.toContain(`.color-gray-DEFAULT`);
 
     expect(css).toContain(`.color-gray-100 { color: #f5f5f5; }`);
     expect(css).toContain(`.color-gray-200 { color: #eeeeee; }`);

@@ -39,7 +39,7 @@ prefix: app`;
 variables:
   color:
     gray:
-      default: '#cccccc'
+      DEFAULT: '#cccccc'
       100: '#f5f5f5'
       200: '#eeeeee'
       300: '#e0e0e0'`;
@@ -47,7 +47,7 @@ variables:
     const sass = generateSassVariables(YAML.parse(config));
 
     expect(sass).toContain("$color-gray: #cccccc;");
-    expect(sass).not.toContain("$color-gray-default");
+    expect(sass).not.toContain("$color-gray-DEFAULT");
 
     expect(sass).toContain("$color-gray-300: #e0e0e0;");
     expect(sass).toContain("$color-gray-300: #e0e0e0;");

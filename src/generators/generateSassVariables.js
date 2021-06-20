@@ -5,7 +5,7 @@ const entries = Object.entries;
 const join = (...values) =>
   values
     .filter((o) => !!o)
-    .filter((o) => o != "default")
+    .filter((o) => o != "DEFAULT")
     .join("-");
 
 const generateSassVariables = (config) => {
