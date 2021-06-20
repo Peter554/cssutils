@@ -3,13 +3,34 @@
 const { writeFileSync } = require("fs");
 const { resolve, dirname } = require("path");
 
+const { cosmiconfigSync } = require("cosmiconfig");
+const YAML = require("yaml");
 const { program } = require("commander");
 const { mkdir } = require("shelljs");
 
-const { getConfig } = require("./getConfig");
 const { generateVariables } = require("./generators/generateVariables");
 const { generateSassVariables } = require("./generators/generateSassVariables");
 const { generateUtilities } = require("./generators/generateUtilities");
+
+const getConfig = (configPath) => {
+  if (configPath) {
+    config = resolve(configPath);
+    if (!existsSync(config)) {
+      throw Error(`Configuration file ${config} does not exist.`);
+    }
+    config = readFileSync(config, "utf8");
+    return extname(config) == ".json" ? JSON.parse(config) : YAML.parse(config);
+  } else {
+    const explorer = cosmiconfigSync("cssutils", {
+      searchPlaces: ["cssutils.yml", "cssutils.yaml", "cssutils.json"],
+    });
+    const searchResult = explorer.search();
+    if (!searchResult) {
+      throw Error(`Configuration file discovery failed.`);
+    }
+    return searchResult.config;
+  }
+};
 
 program.name("cssutils");
 
