@@ -53,31 +53,4 @@ variables:
     expect(css).toContain(":root { --color-gray-200: #eeeeee; }");
     expect(css).toContain(":root { --color-gray-300: #e0e0e0; }");
   });
-
-  it("generates themes", () => {
-    const config = `
-variables:
-  color:
-    text: black
-    background: white
-    border:
-      simple: gray
-themes:
-  dark:
-    color:
-      text: white
-      background: black
-      border:
-        simple: red`;
-
-    css = generateVariables(YAML.parse(config));
-
-    expect(css).toContain(":root { --color-text: black; }");
-    expect(css).toContain(":root { --color-background: white; }");
-    expect(css).toContain(":root { --color-border-simple: gray; }");
-
-    expect(css).toContain(".theme-dark { --color-text: white; }");
-    expect(css).toContain(".theme-dark { --color-background: black; }");
-    expect(css).toContain(".theme-dark { --color-border-simple: red; }");
-  });
 });
