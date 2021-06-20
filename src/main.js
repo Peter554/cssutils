@@ -8,10 +8,9 @@ module.exports = {
     const config = getConfig(configPath);
     return generateVariables(config);
   },
-  utilities: ({ configPath, noSubstitute } = {}) => {
-    const substitute = !noSubstitute;
+  utilities: ({ configPath, keepVariables = false } = {}) => {
     const config = getConfig(configPath);
-    return generateUtilities(config, substitute);
+    return generateUtilities(config, keepVariables);
   },
   sassVariables: ({ configPath } = {}) => {
     const config = getConfig(configPath);

@@ -59,7 +59,7 @@ const pick = (o, keys) => {
   return r;
 };
 
-const generateUtilities = (config, substitute = true) => {
+const generateUtilities = (config, keepVariables = false) => {
   const prefix = config.prefix || "";
   const terminator = config.important ? " !important;" : ";";
 
@@ -103,7 +103,7 @@ const generateUtilities = (config, substitute = true) => {
 
   let css = header;
 
-  if (!substitute) {
+  if (keepVariables) {
     for (const [k1, v1] of entries(config.variables || {})) {
       for (const [k2, v2] of entries(v1)) {
         if (typeof v2 == "object") {

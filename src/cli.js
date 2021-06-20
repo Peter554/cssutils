@@ -72,10 +72,13 @@ program
     "-o, --output <path>",
     "Path to write the output. If not provided will write to stdout."
   )
-  .option("-ns, --no-substitute", "Disable CSS variable substitution.")
+  .option(
+    "--keep-variables",
+    "Keep CSS variables, do not substitute their values."
+  )
   .action((cmd) => {
     const config = getConfig(cmd.config);
-    let css = generateUtilities(config, cmd.substitute);
+    let css = generateUtilities(config, cmd["keep-variables"]);
     if (cmd.output) {
       const output = resolve(cmd.output);
       mkdir("-p", dirname(output));

@@ -372,7 +372,7 @@ breakpoints:
     );
   });
 
-  it("can generate with option substitute=false", () => {
+  it("can generate with option keepVariables", () => {
     const config = `
 variables:
   clr:
@@ -383,14 +383,14 @@ utilities:
   color:
     from: clr`;
 
-    css = generateUtilities(YAML.parse(config), false);
+    css = generateUtilities(YAML.parse(config), true);
 
     expect(css).toContain(`.color-red { color: var(--clr-red); }`);
     expect(css).toContain(`.color-green { color: var(--clr-green); }`);
     expect(css).toContain(`.color-blue { color: var(--clr-blue); }`);
   });
 
-  it("can generates utils with prefix with option substitute=false", () => {
+  it("can generates utils with prefix with option keepVariables", () => {
     const config = `
 variables:
   color:
@@ -402,7 +402,7 @@ utilities:
     from: color
 prefix: app`;
 
-    css = generateUtilities(YAML.parse(config), false);
+    css = generateUtilities(YAML.parse(config), true);
 
     expect(css).toContain(`.app-color-red { color: var(--app-color-red); }`);
     expect(css).toContain(
