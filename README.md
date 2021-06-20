@@ -15,7 +15,7 @@ A CSS utility class generator. User friendly, simple, powerful. Inspired by [tai
 ### CSS variables
 
 - `cssutils variables --config ./config.yml`
-- `cssutils.variables({configPath: "./config.yml"})`
+- `cssutils.variables(config)`
 
 ```yml
 variables:
