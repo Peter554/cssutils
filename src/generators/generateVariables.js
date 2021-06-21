@@ -1,5 +1,3 @@
-const { header } = require("../header");
-
 const entries = Object.entries;
 
 const join = (...values) =>
@@ -18,7 +16,7 @@ const generateVariables = (config) => {
   const variable = (name, value) =>
     `:root { --${join(prefix, name)}: ${value}; }\n`;
 
-  let css = header;
+  let css = "";
 
   let s = [];
   for (const [k1, v1] of entries(config.variables)) {

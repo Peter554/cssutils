@@ -1,5 +1,3 @@
-const { header } = require("../header");
-
 const entries = Object.entries;
 
 const join = (...values) =>
@@ -101,7 +99,7 @@ const generateUtilities = (config, keepVariables = false) => {
     },
   };
 
-  let css = header;
+  let css = "";
 
   if (keepVariables) {
     for (const [k1, v1] of entries(config.variables || {})) {
