@@ -1,18 +1,20 @@
-const YAML = require("yaml");
-
 const { generateUtilities, _sortFunc } = require("./generateUtilities");
 
 describe("generateUtilities", () => {
   it("generates utils", () => {
-    const config = `
-utilities:
-  color:
-    from:
-      red: '#f00'
-      green: '#0f0'
-      blue: '#00f'`;
+    const config = {
+      utilities: {
+        color: {
+          from: {
+            red: "#f00",
+            green: "#0f0",
+            blue: "#00f",
+          },
+        },
+      },
+    };
 
-    css = generateUtilities(YAML.parse(config));
+    css = generateUtilities(config);
 
     expect(css).toContain(`.color-red { color: #f00; }`);
     expect(css).toContain(`.color-green { color: #0f0; }`);
@@ -20,16 +22,20 @@ utilities:
   });
 
   it("generates utils with prefix", () => {
-    const config = `
-utilities:
-  color:
-    from:
-      red: '#f00'
-      green: '#0f0'
-      blue: '#00f'
-prefix: app`;
+    const config = {
+      utilities: {
+        color: {
+          from: {
+            red: "#f00",
+            green: "#0f0",
+            blue: "#00f",
+          },
+        },
+      },
+      prefix: "app",
+    };
 
-    css = generateUtilities(YAML.parse(config));
+    css = generateUtilities(config);
 
     expect(css).toContain(`.app-color-red { color: #f00; }`);
     expect(css).toContain(`.app-color-green { color: #0f0; }`);
@@ -37,16 +43,20 @@ prefix: app`;
   });
 
   it("generates utils with !important", () => {
-    const config = `
-utilities:
-  color:
-    from:
-      red: '#f00'
-      green: '#0f0'
-      blue: '#00f'
-important: true`;
+    const config = {
+      utilities: {
+        color: {
+          from: {
+            red: "#f00",
+            green: "#0f0",
+            blue: "#00f",
+          },
+        },
+      },
+      important: true,
+    };
 
-    css = generateUtilities(YAML.parse(config));
+    css = generateUtilities(config);
 
     expect(css).toContain(`.color-red { color: #f00 !important; }`);
     expect(css).toContain(`.color-green { color: #0f0 !important; }`);
@@ -54,16 +64,20 @@ important: true`;
   });
 
   it("generates utils with alias", () => {
-    const config = `
-utilities:
-  color:
-    alias: colour
-    from:
-      red: '#f00'
-      green: '#0f0'
-      blue: '#00f'`;
+    const config = {
+      utilities: {
+        color: {
+          alias: "colour",
+          from: {
+            red: "#f00",
+            green: "#0f0",
+            blue: "#00f",
+          },
+        },
+      },
+    };
 
-    css = generateUtilities(YAML.parse(config));
+    css = generateUtilities(config);
 
     expect(css).toContain(`.colour-red { color: #f00; }`);
     expect(css).toContain(`.colour-green { color: #0f0; }`);
@@ -71,19 +85,24 @@ utilities:
   });
 
   it("generates nested utils", () => {
-    const config = `
-utilities:
-  color:
-    from:
-      red: '#f00'
-      green: '#0f0'
-      gray:
-        DEFAULT: '#cccccc'
-        100: '#f5f5f5'
-        200: '#eeeeee'
-        300: '#e0e0e0'`;
+    const config = {
+      utilities: {
+        color: {
+          from: {
+            red: "#f00",
+            green: "#0f0",
+            gray: {
+              DEFAULT: "#cccccc",
+              "100": "#f5f5f5",
+              "200": "#eeeeee",
+              "300": "#e0e0e0",
+            },
+          },
+        },
+      },
+    };
 
-    css = generateUtilities(YAML.parse(config));
+    css = generateUtilities(config);
 
     expect(css).toContain(`.color-red { color: #f00; }`);
     expect(css).toContain(`.color-green { color: #0f0; }`);
@@ -97,17 +116,22 @@ utilities:
   });
 
   it("generates utils from variables", () => {
-    const config = `
-variables:
-  color:
-    red: '#f00'
-    green: '#0f0'
-    blue: '#00f'
-utilities:
-  color:
-    from: color`;
+    const config = {
+      variables: {
+        clr: {
+          red: "#f00",
+          green: "#0f0",
+          blue: "#00f",
+        },
+      },
+      utilities: {
+        color: {
+          from: "clr",
+        },
+      },
+    };
 
-    css = generateUtilities(YAML.parse(config));
+    css = generateUtilities(config);
 
     expect(css).toContain(`.color-red { color: #f00; }`);
     expect(css).toContain(`.color-green { color: #0f0; }`);
@@ -115,19 +139,25 @@ utilities:
   });
 
   it("generates nested utils from variables", () => {
-    const config = `
-variables:
-  color:
-    gray:
-      DEFAULT: '#cccccc'
-      100: '#f5f5f5'
-      200: '#eeeeee'
-      300: '#e0e0e0'
-utilities:
-  color:
-    from: color`;
+    const config = {
+      variables: {
+        clr: {
+          gray: {
+            DEFAULT: "#cccccc",
+            "100": "#f5f5f5",
+            "200": "#eeeeee",
+            "300": "#e0e0e0",
+          },
+        },
+      },
+      utilities: {
+        color: {
+          from: "clr",
+        },
+      },
+    };
 
-    css = generateUtilities(YAML.parse(config));
+    css = generateUtilities(config);
 
     expect(css).toContain(`.color-gray { color: #cccccc; }`);
     expect(css).not.toContain(`.color-gray-DEFAULT`);
@@ -138,19 +168,24 @@ utilities:
   });
 
   it("generates breakpoint utils", () => {
-    const config = `
-utilities:
-  color:
-    from:
-        red: '#f00'
-        green: '#0f0'
-    breakpoints: [md, lg]
-breakpoints:
-  md: 800px
-  lg: 1200px
-  xl: 1600px`;
+    const config = {
+      utilities: {
+        color: {
+          from: {
+            red: "#f00",
+            green: "#0f0",
+          },
+          breakpoints: ["md", "lg"],
+        },
+      },
+      breakpoints: {
+        md: "800px",
+        lg: "1200px",
+        xl: "1600px",
+      },
+    };
 
-    css = generateUtilities(YAML.parse(config));
+    css = generateUtilities(config);
 
     expect(css).toContain(
       `@media (min-width: 800px) { .md\\:color-red { color: #f00; } }`
@@ -173,20 +208,27 @@ breakpoints:
   });
 
   it("generates breakpoint utils from variables", () => {
-    const config = `
-variables:
-  breakpoint:
-    md: 800px
-    lg: 1200px
-utilities:
-  color:
-    from:
-        red: '#f00'
-        green: '#0f0'
-    breakpoints: true
-breakpoints: breakpoint`;
+    const config = {
+      variables: {
+        screens: {
+          md: "800px",
+          lg: "1200px",
+          xl: "1600px",
+        },
+      },
+      utilities: {
+        color: {
+          from: {
+            red: "#f00",
+            green: "#0f0",
+          },
+          breakpoints: ["md", "lg"],
+        },
+      },
+      breakpoints: "screens",
+    };
 
-    css = generateUtilities(YAML.parse(config));
+    css = generateUtilities(config);
 
     expect(css).toContain(
       `@media (min-width: 800px) { .md\\:color-red { color: #f00; } }`
@@ -203,19 +245,24 @@ breakpoints: breakpoint`;
   });
 
   it("generates pseudo utils", () => {
-    const config = `
-utilities:
-  color:
-    from:
-      red: '#f00'
-      green: '#0f0'
-    pseudo: [hvr, act]
-pseudo:
-  hvr: hover
-  fcs: [focus]
-  act: [hover, focus, active]`;
+    const config = {
+      utilities: {
+        color: {
+          from: {
+            red: "#f00",
+            green: "#0f0",
+          },
+          pseudo: ["hvr", "act"],
+        },
+      },
+      pseudo: {
+        hvr: "hover",
+        fcs: ["focus"],
+        act: ["hover", "focus", "active"],
+      },
+    };
 
-    css = generateUtilities(YAML.parse(config));
+    css = generateUtilities(config);
 
     expect(css).toContain(`.hvr\\:color-red:hover { color: #f00; }`);
     expect(css).not.toContain(`.fcs\\:color-red:focus { color: #f00; }`);
@@ -232,15 +279,19 @@ pseudo:
   });
 
   it("generates util rotations", () => {
-    const config = `
-utilities:
-  padding:
-    from:
-      md: 0.5rem
-      lg: 1rem
-    rotations: true`;
+    const config = {
+      utilities: {
+        padding: {
+          from: {
+            md: "0.5rem",
+            lg: "1rem",
+          },
+          rotations: true,
+        },
+      },
+    };
 
-    css = generateUtilities(YAML.parse(config));
+    css = generateUtilities(config);
 
     expect(css).toContain(`.padding-md { padding: 0.5rem; }`);
     expect(css).toContain(`.padding-t-md { padding-top: 0.5rem; }`);
@@ -268,23 +319,29 @@ utilities:
   });
 
   it("generates a complex util", () => {
-    const config = `
-utilities:
-  padding:
-    from:
-      md: 0.5rem
-      lg: 1rem
-    pseudo: true
-    breakpoints: true
-    rotations: true
-pseudo:
-  hover: hover
-  focus: [focus]
-breakpoints:
-  md: 800px
-  lg: 1200px`;
+    const config = {
+      utilities: {
+        padding: {
+          from: {
+            md: "0.5rem",
+            lg: "1rem",
+          },
+          pseudo: true,
+          breakpoints: true,
+          rotations: true,
+        },
+      },
+      pseudo: {
+        hover: "hover",
+        focus: ["focus"],
+      },
+      breakpoints: {
+        md: "800px",
+        lg: "1200px",
+      },
+    };
 
-    css = generateUtilities(YAML.parse(config));
+    css = generateUtilities(config);
 
     expect(css).toContain(".padding-md { padding: 0.5rem; }");
 
@@ -319,26 +376,33 @@ breakpoints:
   });
 
   it("generates a complex util 2", () => {
-    const config = `
-utilities:
-  background-color:
-    alias: bg-color
-    from:
-      gray:
-        100: '#f5f5f5'
-        200: '#eeeeee'
-        300: '#e0e0e0'
-    pseudo: [focus]
-    breakpoints: [lg]
-    rotations: true
-pseudo:
-  hover: hover
-  focus: focus
-breakpoints:
-  md: 800px
-  lg: 1200px`;
+    const config = {
+      utilities: {
+        "background-color": {
+          alias: "bg-color",
+          from: {
+            gray: {
+              "100": "#f5f5f5",
+              "200": "#eeeeee",
+              "300": "#e0e0e0",
+            },
+          },
+          pseudo: ["focus"],
+          breakpoints: ["lg"],
+          rotations: true,
+        },
+      },
+      pseudo: {
+        hover: "hover",
+        focus: ["focus"],
+      },
+      breakpoints: {
+        md: "800px",
+        lg: "1200px",
+      },
+    };
 
-    css = generateUtilities(YAML.parse(config));
+    css = generateUtilities(config);
 
     expect(css).toContain(".bg-color-gray-100 { background-color: #f5f5f5; }");
 
@@ -373,17 +437,22 @@ breakpoints:
   });
 
   it("can generate with option keepVariables", () => {
-    const config = `
-variables:
-  clr:
-    red: '#f00'
-    green: '#0f0'
-    blue: '#00f'
-utilities:
-  color:
-    from: clr`;
+    const config = {
+      variables: {
+        clr: {
+          red: "#f00",
+          green: "#0f0",
+          blue: "#00f",
+        },
+      },
+      utilities: {
+        color: {
+          from: "clr",
+        },
+      },
+    };
 
-    css = generateUtilities(YAML.parse(config), true);
+    css = generateUtilities(config, true);
 
     expect(css).toContain(`.color-red { color: var(--clr-red); }`);
     expect(css).toContain(`.color-green { color: var(--clr-green); }`);
@@ -391,24 +460,27 @@ utilities:
   });
 
   it("can generates utils with prefix with option keepVariables", () => {
-    const config = `
-variables:
-  color:
-    red: '#f00'
-    green: '#0f0'
-    blue: '#00f'
-utilities:
-  color:
-    from: color
-prefix: app`;
+    const config = {
+      variables: {
+        clr: {
+          red: "#f00",
+          green: "#0f0",
+          blue: "#00f",
+        },
+      },
+      utilities: {
+        color: {
+          from: "clr",
+        },
+      },
+      prefix: "app",
+    };
 
-    css = generateUtilities(YAML.parse(config), true);
+    css = generateUtilities(config, true);
 
-    expect(css).toContain(`.app-color-red { color: var(--app-color-red); }`);
-    expect(css).toContain(
-      `.app-color-green { color: var(--app-color-green); }`
-    );
-    expect(css).toContain(`.app-color-blue { color: var(--app-color-blue); }`);
+    expect(css).toContain(`.app-color-red { color: var(--app-clr-red); }`);
+    expect(css).toContain(`.app-color-green { color: var(--app-clr-green); }`);
+    expect(css).toContain(`.app-color-blue { color: var(--app-clr-blue); }`);
   });
 });
 
